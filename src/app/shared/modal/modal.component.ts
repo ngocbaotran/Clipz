@@ -1,15 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 
+import { ModalService } from '../../services/modal.service';
+
 @Component({
   selector: 'app-modal',
   templateUrl: './modal.component.html',
-  styleUrls: ['./modal.component.css']
+  styleUrls: ['./modal.component.css'],
+  // providers: [ModalService]
 })
 export class ModalComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    public modalService: ModalService
+  ) {
+    // code
+  }
 
   ngOnInit(): void {
   }
 
+  closeModal() {
+    this.modalService.toggleModal();
+  }
 }
