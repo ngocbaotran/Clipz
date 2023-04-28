@@ -21,8 +21,14 @@ export class AuthService {
     if (!userData.password) {
       throw new Error("Password not provided!");
     }
+
     const userCred = await this.auth.createUserWithEmailAndPassword(userData.email, userData.password);
-    await this.usersCollection.add({
+
+    if (!userCred.user) {
+      throw new Error("User can't be found");
+    }
+
+    await this.usersCollection.doc(userCred.user.uid).set({
       name: userData.name,
       email: userData.email,
       age: userData.age,
