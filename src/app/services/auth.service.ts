@@ -54,6 +54,10 @@ export class AuthService {
       age: userData.age,
       phoneNumber: userData.phoneNumber
     });
+
+    await userCred.user.updateProfile({
+      displayName: userData.name
+    });
   }
 
   public async logout($event?: Event) {
