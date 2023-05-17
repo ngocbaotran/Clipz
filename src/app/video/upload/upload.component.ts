@@ -11,6 +11,7 @@ import { combineLatest, forkJoin } from "rxjs";
 
 import { ClipService } from '../../services/clip.service';
 import { FfmpegService } from '../../services/ffmpeg.service';
+import IClip from "../../models/clip.model";
 
 @Component({
   selector: 'app-upload',
@@ -84,7 +85,7 @@ export class UploadComponent implements OnDestroy {
     this.isSubmission = true;
     this.showPercentage = true;
     const clipFileName = uuid();
-    const clipPath = `clip/${clipFileName}.mp4`;
+    const clipPath = `clips/${clipFileName}.mp4`;
     const screenshotBlob = await this.ffmpegService.blobFromURL(this.selectedScreenshot);
     const screenshotPath = `screenshots/${clipFileName}.png`;
     this.task = this.storage.upload(clipPath, this.file);
@@ -123,11 +124,12 @@ export class UploadComponent implements OnDestroy {
             fileName: `${clipFileName}.mp4`,
             url: clipURL,
             screenshotURL,
+            screenshotFileName: `${clipFileName}.png`,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
           };
 
+          const clipDocRef = await this.clipsService.createClip(clip as IClip);
           console.log(clip);
-          const clipDocRef = await this.clipsService.createClip(clip);
           this.alertColor = 'green';
           this.alertMsg = 'Success! Your clip is now ready to share with the world!';
           this.showPercentage = false;
