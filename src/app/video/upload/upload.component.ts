@@ -2,15 +2,15 @@ import { Component, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/compat/storage';
 import firebase from 'firebase/compat/app';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AngularFireAuth } from '@angular/fire/compat/auth'
+import { Router } from '@angular/router';
 
 import { v4 as uuid } from 'uuid';
-import { last, switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
+import { combineLatest, forkJoin } from "rxjs";
 
 import { ClipService } from '../../services/clip.service';
-import { Router } from '@angular/router';
 import { FfmpegService } from '../../services/ffmpeg.service';
-import {combineLatest} from "rxjs";
 
 @Component({
   selector: 'app-upload',
@@ -90,6 +90,7 @@ export class UploadComponent implements OnDestroy {
     this.task = this.storage.upload(clipPath, this.file);
     const clipRef = this.storage.ref(clipPath); // tham chiếu đến file trên Firebase Storage theo clipPath để tương tác với file
     this.screenshotTask = this.storage.upload(screenshotPath, screenshotBlob);
+    const screenshotRef = this.storage.ref(screenshotPath);
     combineLatest([
       this.task.percentageChanges(),
       this.screenshotTask.percentageChanges()
@@ -103,16 +104,25 @@ export class UploadComponent implements OnDestroy {
       const total = clipProgress + screenshotProgress;
       this.percentage = total as number / 200;
     });
-    this.task.snapshotChanges()
-      .pipe(last(), switchMap(() => clipRef.getDownloadURL()))
+    forkJoin([
+      this.task.snapshotChanges(),
+      this.screenshotTask.snapshotChanges()
+    ])
+      .pipe(switchMap(() => forkJoin([
+        clipRef.getDownloadURL(),
+        screenshotRef.getDownloadURL()
+      ])))
       .subscribe({
-        next: async (url) => {
+        next: async (urls) => {
+          const [clipURL, screenshotURL] = urls;
+
           const clip = {
             uid: this.user?.uid as string,
             displayName: this.user?.displayName as string,
             title: this.title.value,
             fileName: `${clipFileName}.mp4`,
-            url,
+            url: clipURL,
+            screenshotURL,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
           };
 
