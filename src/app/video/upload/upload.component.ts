@@ -10,6 +10,7 @@ import { last, switchMap } from 'rxjs/operators';
 import { ClipService } from '../../services/clip.service';
 import { Router } from '@angular/router';
 import { FfmpegService } from '../../services/ffmpeg.service';
+import {combineLatest} from "rxjs";
 
 @Component({
   selector: 'app-upload',
@@ -89,8 +90,18 @@ export class UploadComponent implements OnDestroy {
     this.task = this.storage.upload(clipPath, this.file);
     const clipRef = this.storage.ref(clipPath); // tham chiếu đến file trên Firebase Storage theo clipPath để tương tác với file
     this.screenshotTask = this.storage.upload(screenshotPath, screenshotBlob);
-    this.task.percentageChanges().subscribe(progress => {
-      this.percentage = progress as number / 100;
+    combineLatest([
+      this.task.percentageChanges(),
+      this.screenshotTask.percentageChanges()
+    ]).subscribe((progress) => {
+      const [clipProgress, screenshotProgress] = progress;
+
+      if (!clipProgress || !screenshotProgress) {
+        return;
+      }
+
+      const total = clipProgress + screenshotProgress;
+      this.percentage = total as number / 200;
     });
     this.task.snapshotChanges()
       .pipe(last(), switchMap(() => clipRef.getDownloadURL()))
