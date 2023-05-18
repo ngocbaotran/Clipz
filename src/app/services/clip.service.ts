@@ -12,7 +12,9 @@ import IClip from '../models/clip.model';
   providedIn: 'root'
 })
 export class ClipService {
-  public clipsCollection: AngularFirestoreCollection<IClip>
+  public clipsCollection: AngularFirestoreCollection<IClip>;
+  pageClips: IClip[] = [];
+  pendingReq = false;
 
   constructor(
     private db: AngularFirestore,
@@ -65,5 +67,38 @@ export class ClipService {
     await clipRef.delete();
     await screenshotRef.delete();
     await this.clipsCollection.doc(clip.docID).delete();
+  }
+
+  async getClips() {
+    if (this.pendingReq) {
+      return;
+    }
+
+    this.pendingReq = true;
+    let query = this.clipsCollection.ref
+      .orderBy('timestamp', 'desc')
+      .limit(6);
+    const { length } = this.pageClips;
+
+    if (length) {
+      const lastDocID = this.pageClips[length - 1].docID;
+      const lastDoc = await this.clipsCollection
+        .doc(lastDocID)
+        .get()
+        .toPromise();
+
+      query = query.startAfter(lastDoc);
+    }
+
+    const snapshot = await query.get();
+
+    snapshot.forEach(doc => {
+      this.pageClips.push({
+        docID: doc.id,
+        ...doc.data()
+      });
+    });
+
+    this.pendingReq = false;
   }
 }
