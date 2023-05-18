@@ -26,6 +26,9 @@ export class FfmpegService {
   async getScreenshots(file: File) {
     this.isRunning = true;
     const data = await fetchFile(file);
+    // ghi dữ liệu nhị phân của ảnh vào hệ thống tệp ảo (virtual file system) của thư viện FFmpeg
+    // hệ thống tệp ảo này tồn tại trong bộ nhớ của trình duyệt và không tương tác trực tiếp với hệ thống tệp vật lý trên máy tính
+    // kiểu dữ liệu của nội dung để ghi vào FS('writeFile') là Uint8Array
     this.ffmpeg.FS('writeFile', file.name, data);
     const seconds = [1, 2, 3];
     const commands: string[] = [];
@@ -33,13 +36,13 @@ export class FfmpegService {
     seconds.forEach(second => {
       commands.push(
         // Input
-        '-i', file.name,
+        '-i', file.name, // file đầu vào
         // Output Options
-        '-ss', `00:00:0${second}`,
-        '-frames:v', '1',
+        '-ss', `00:00:0${second}`, // thời điểm muốn lấy ảnh từ video
+        '-frames:v', '1', // xác định số frame muốn lấy ra
         '-filter:v', 'scale=510:-1',
         // Output
-        `output_0${second}.png`
+        `output_0${second}.png` // định dạng file đầu ra
       );
     });
 
