@@ -5,7 +5,7 @@ import { AngularFireStorage } from "@angular/fire/compat/storage";
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from "@angular/router";
 
 import { map, switchMap } from 'rxjs/operators';
-import { BehaviorSubject, combineLatest, of } from 'rxjs';
+import {BehaviorSubject, combineLatest, of} from 'rxjs';
 
 import IClip from '../models/clip.model';
 
@@ -113,7 +113,7 @@ export class ClipService implements Resolve<IClip | null>{
 
           if (!data) {
             this.router.navigate(['/']);
-            return;
+            return null;
           }
 
           return data;
