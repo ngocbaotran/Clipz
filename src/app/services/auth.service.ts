@@ -71,4 +71,12 @@ export class AuthService {
       await this.router.navigateByUrl('/');
     }
   }
+
+  public updateUser(userData: IUser, uid: string | undefined) {
+    return this.usersCollection.doc(uid).update({
+      name: userData.name,
+      age: userData.age,
+      phoneNumber: userData.phoneNumber
+    });
+  }
 }

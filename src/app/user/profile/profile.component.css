@@ -1,0 +1,109 @@
+form {
+  padding: 30px;
+  clip-path: polygon(30px 0%, 100% 0, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0 100%, 0% 30px);
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+form .change-password {
+  max-height: 200px;
+  height: 100%;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+:root {
+  --card-height: 300px;
+  --card-width: calc(var(--card-height) / 1.5);
+}
+
+.profile {
+  mix-blend-mode: screen;
+  width: 60vh;
+  height: 80vh;
+  display: flex;
+  align-items: flex-end;
+}
+
+.card {
+  /*width: var(--card-width);*/
+  /*height: var(--card-height);*/
+  padding: 0 36px;
+  perspective: 2500px;
+}
+
+.wrapper {
+  transition: all 0.5s;
+  z-index: -1;
+}
+
+.card.img3D .wrapper {
+  transform: perspective(900px) translateY(-5%) rotateX(25deg) translateZ(0);
+  box-shadow: 2px 35px 32px -8px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: 2px 35px 32px -8px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 2px 35px 32px -8px rgba(0, 0, 0, 0.75);
+}
+
+.wrapper::before,
+.wrapper::after {
+  content: "";
+  opacity: 0;
+  width: 100%;
+  height: 80px;
+  transition: all 0.5s;
+  position: absolute;
+  left: 0;
+}
+.wrapper::before {
+  top: 0;
+  height: 100%;
+  background-image: linear-gradient(
+    to top,
+    transparent 46%,
+    rgba(12, 13, 19, 0.5) 68%,
+    rgba(12, 13, 19) 97%
+  );
+}
+.wrapper::after {
+  bottom: 0;
+  opacity: 1;
+  background-image: linear-gradient(
+    to bottom,
+    transparent 46%,
+    rgba(12, 13, 19, 0.5) 68%,
+    rgba(12, 13, 19) 97%
+  );
+}
+
+.card.img3D .wrapper::before,
+.wrapper::after {
+  opacity: 1;
+}
+
+.card.img3D .wrapper::after {
+  height: 120px;
+}
+.title {
+  /*width: 100%;*/
+  width: 435px;
+  height: 236px;
+  transition: transform 0.5s;
+}
+
+.card.img3D .title {
+  transform: translate3d(0%, -50px, 100px);
+}
+
+.character {
+  width: 100%;
+  opacity: 0;
+  transition: all 0.5s;
+  position: absolute;
+  z-index: -1;
+}
+
+.card.img3D .character {
+  opacity: 1;
+  /*transform: translate3d(0%, -30%, 100px);*/
+  transform: translate3d(0%, -17%, 100px);
+}
