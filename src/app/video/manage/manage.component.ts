@@ -17,6 +17,7 @@ export class ManageComponent implements OnInit {
   clips: IClip[] = [];
   activeClip: IClip | null = null;
   sort$: BehaviorSubject<string>;
+  copied = false;
 
   constructor(
     private router: Router,
@@ -88,6 +89,10 @@ export class ManageComponent implements OnInit {
 
     const url = `${location.origin}/clip/${docID}`;
     await navigator.clipboard.writeText(url);
-    alert('Link Copied!');
+    this.copied = true;
+
+    setTimeout(() => {
+      this.copied = false;
+    }, 2500);
   }
 }
