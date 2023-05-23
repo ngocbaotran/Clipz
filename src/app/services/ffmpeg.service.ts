@@ -30,7 +30,7 @@ export class FfmpegService {
     // hệ thống tệp ảo này tồn tại trong bộ nhớ của trình duyệt và không tương tác trực tiếp với hệ thống tệp vật lý trên máy tính
     // kiểu dữ liệu của nội dung để ghi vào FS('writeFile') là Uint8Array
     this.ffmpeg.FS('writeFile', file.name, data);
-    const seconds = [1, 2, 3];
+    const seconds = [3, 7, 9];
     const commands: string[] = [];
 
     seconds.forEach(second => {
