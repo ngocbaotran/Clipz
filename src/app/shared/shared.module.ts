@@ -8,6 +8,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { NgxMaskModule } from "ngx-mask";
 import { AlertComponent } from './alert/alert.component';
 import { EventBlockerDirective } from './directives/event-blocker.directive';
+import { FbTimestampPipe } from '../pipes/fb-timestamp.pipe';
 // import { ModalService } from '../services/modal.service';
 
 @NgModule({
@@ -17,7 +18,8 @@ import { EventBlockerDirective } from './directives/event-blocker.directive';
     TabComponent,
     InputComponent,
     AlertComponent,
-    EventBlockerDirective
+    EventBlockerDirective,
+    FbTimestampPipe
   ],
   imports: [
     CommonModule,
@@ -30,7 +32,8 @@ import { EventBlockerDirective } from './directives/event-blocker.directive';
     TabComponent,
     InputComponent,
     AlertComponent,
-    EventBlockerDirective
+    EventBlockerDirective,
+    FbTimestampPipe
   ],
   providers: [
     // ModalService

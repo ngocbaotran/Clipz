@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { DatePipe } from '@angular/common';
 
 import { BehaviorSubject } from "rxjs";
 
@@ -10,7 +11,8 @@ import { ModalService } from '../../services/modal.service';
 @Component({
   selector: 'app-manage',
   templateUrl: './manage.component.html',
-  styleUrls: ['./manage.component.css']
+  styleUrls: ['./manage.component.css'],
+  providers: [DatePipe]
 })
 export class ManageComponent implements OnInit {
   videoOrder = '1';

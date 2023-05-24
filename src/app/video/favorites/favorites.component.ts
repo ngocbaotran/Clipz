@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DatePipe } from "@angular/common";
 
 import IClip from '../../models/clip.model';
 import { ClipService } from '../../services/clip.service';
@@ -6,7 +7,8 @@ import { ClipService } from '../../services/clip.service';
 @Component({
   selector: 'app-favorites',
   templateUrl: './favorites.component.html',
-  styleUrls: ['./favorites.component.css']
+  styleUrls: ['./favorites.component.css'],
+  providers: [DatePipe]
 })
 export class FavoritesComponent implements OnInit {
   clips: IClip[] = [];

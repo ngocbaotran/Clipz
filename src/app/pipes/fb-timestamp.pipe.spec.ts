@@ -1,8 +1,8 @@
-import { FbTimestampPipe } from './fb-timestamp.pipe';
+import {FbTimestampPipe} from "./fb-timestamp.pipe";
 
 describe('FbTimestampPipe', () => {
   it('create an instance', () => {
-    const pipe = new FbTimestampPipe();
+    const pipe = new FbTimestampPipe()
     expect(pipe).toBeTruthy();
   });
 });
