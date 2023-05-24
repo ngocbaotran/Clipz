@@ -72,7 +72,7 @@ export class AuthService {
     }
   }
 
-  public updateUser(userData: IUser, uid: string | undefined) {
+  public async updateUser(userData: IUser, uid: string | undefined) {
     return this.usersCollection.doc(uid).update({
       name: userData.name,
       age: userData.age,

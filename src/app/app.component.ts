@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+
 import { AuthService } from "./services/auth.service";
 
 @Component({
@@ -16,9 +17,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     window.addEventListener('scroll', () => {
-      const { scrollTop, offsetHeight } = document.documentElement;
-      const { innerHeight } = window;
-      this.windowScrolled = Math.round(scrollTop) + innerHeight > (offsetHeight / 2);
+      this.windowScrolled = this.windowScrolled = window.pageYOffset > 450;
     });
   }
 

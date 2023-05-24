@@ -92,6 +92,8 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   toggleChangePassword() {
+    this.password.reset();
+    this.confirm_password.reset();
     this.changePassword = !this.changePassword;
   }
 
@@ -103,6 +105,7 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
     this.inSubmission = true;
 
     try {
+      await this.user?.updatePassword(this.password.value);
       await this.authService.updateUser(this.informationForm.value, this.user?.uid);
       // this.userData = this.informationForm.value;
       // this.initFormValue();
@@ -121,11 +124,13 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
     setTimeout(() => {
       this.showAlert = false;
       this.inSubmission = false;
+      this.informationForm.reset();
       this.informationForm.enable();
     }, 1000);
   }
 
   ngOnDestroy() {
+    this.informationForm.reset();
     this.userSubscription?.unsubscribe();
   }
 
