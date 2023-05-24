@@ -5,7 +5,8 @@ import { AngularFireStorage } from "@angular/fire/compat/storage";
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from "@angular/router";
 
 import { map, switchMap } from 'rxjs/operators';
-import {BehaviorSubject, combineLatest, of} from 'rxjs';
+import { BehaviorSubject, combineLatest, of } from 'rxjs';
+import firebase from 'firebase/compat/app';
 
 import IClip from '../models/clip.model';
 
@@ -116,8 +117,37 @@ export class ClipService implements Resolve<IClip | null>{
             return null;
           }
 
-          return data;
+          return {
+            docID: route.params.id,
+            ...data
+          };
         })
       );
+  }
+
+  addFavorite(id: string, uid: string) {
+    return this.clipsCollection.doc(id).update({
+      favorite: uid
+    });
+  }
+
+  removeFavorite(id: string) {
+    return this.clipsCollection.doc(id).update({
+      favorite: firebase.firestore.FieldValue.delete()
+    });
+  }
+
+  getFavoriteClips() {
+    return this.auth.user.pipe(
+      switchMap(user => {
+        if (!user) {
+          return of([]);
+        }
+
+        const query = this.clipsCollection.ref.where('favorite', '==', user.uid);
+        return query.get();
+      }),
+      map(snapshot => (snapshot as QuerySnapshot<IClip>))
+    );
   }
 }

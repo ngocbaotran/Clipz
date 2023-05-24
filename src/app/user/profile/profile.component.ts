@@ -1,10 +1,10 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat/app';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { of } from 'rxjs';
+import { of, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
 import IUser from '../../models/user.model';
@@ -16,7 +16,7 @@ import { AuthService } from "../../services/auth.service";
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent implements OnInit, AfterViewInit {
+export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
   user: firebase.User | null = null;
   changePassword = false;
   img3D = false;
@@ -25,6 +25,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   showAlert = false;
   alertMsg = '';
   alertColor = 'blue';
+  userSubscription?: Subscription;
 
   name = new FormControl('', [
     Validators.required,
@@ -62,7 +63,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   }
 
   async ngOnInit() {
-    this.auth.user.subscribe(user => {
+    this.userSubscription = this.auth.user.subscribe(user => {
       if (user) {
         this.user = user;
         this.firestore
@@ -122,6 +123,10 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       this.inSubmission = false;
       this.informationForm.enable();
     }, 1000);
+  }
+
+  ngOnDestroy() {
+    this.userSubscription?.unsubscribe();
   }
 
   private initFormValue() {
