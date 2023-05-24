@@ -118,13 +118,17 @@
         <!-- Update Button -->
         <div class="md:flex md:items-center">
           <div class="md:w-2/3">
-            <div class="button-borders">
-              <button type="submit" [disabled]="(informationForm.invalid && changePassword) || inSubmission"
-                      class="primary-button bg-indigo-400 disabled:opacity-50 disabled:cursor-not-allowed"
-                      (click)="updateUser()">
-                Cập nhật tài khoản
-              </button>
-            </div>
+<!--            <div class="button-borders">-->
+<!--              <button type="submit" [disabled]="(informationForm.invalid && changePassword) || inSubmission"-->
+<!--                      class="primary-button bg-indigo-400 disabled:opacity-50 disabled:cursor-not-allowed"-->
+<!--                      (click)="updateUser()">-->
+<!--                Cập nhật tài khoản-->
+<!--              </button>-->
+<!--            </div>-->
+            <button type="submit" [disabled]="(informationForm.invalid && changePassword) || inSubmission"
+                    class="clipz-btn disabled:opacity-50 disabled:cursor-not-allowed bg-indigo-400">
+              <span>Cập nhật tài khoản</span><i></i>
+            </button>
           </div>
         </div>
         <!-- Update Button -->
