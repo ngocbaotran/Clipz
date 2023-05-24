@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -16,6 +17,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { ClipsListComponent } from './clips-list/clips-list.component';
 import { SharedModule } from './shared/shared.module';
+import { SearchComponent } from './search/search.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,7 @@ import { SharedModule } from './shared/shared.module';
     ClipComponent,
     NotFoundComponent,
     ClipsListComponent,
+    SearchComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,9 +38,11 @@ import { SharedModule } from './shared/shared.module';
     AngularFirestoreModule,
     AppRoutingModule,
     AngularFireStorageModule,
-    SharedModule
+    SharedModule,
+    FormsModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  exports: [NotFoundComponent]
 })
 export class AppModule { }

@@ -222,3 +222,43 @@
   background-color: #818cf8;
 }
 /* Submenu */
+
+/* Search */
+.icon {
+  position: absolute;
+  right: 10px;
+  top: calc(50% + 5px);
+  transform: translateY(calc(-50% - 5px));
+}
+
+.input {
+  width: 100%;
+  height: 40px;
+  padding: 10px;
+  transition: .2s linear;
+  border: 3px solid rgb(129 140 248);
+  font-size: 14px;
+  letter-spacing: 2px;
+}
+
+.input:focus {
+  outline: none;
+  border: 0.5px solid rgb(129 140 248);
+  box-shadow: -5px -5px 0 rgb(129 140 248);
+}
+
+.search-input-container:hover > .icon {
+  animation: anim 1s linear infinite;
+}
+
+@keyframes anim {
+  0%,
+  100% {
+    transform: translateY(calc(-50% - 5px)) scale(1);
+  }
+
+  50% {
+    transform: translateY(calc(-50% - 5px)) scale(1.1);
+  }
+}
+/* Search */

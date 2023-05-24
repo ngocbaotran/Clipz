@@ -1,17 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 
 import { AuthService } from "./services/auth.service";
+import { AppService } from './app.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterContentChecked {
   windowScrolled = false;
 
   constructor(
-    public auth: AuthService
+    public auth: AuthService,
+    public appService: AppService,
+    private changeDetector: ChangeDetectorRef,
   ) {
   }
 
@@ -19,6 +22,10 @@ export class AppComponent implements OnInit {
     window.addEventListener('scroll', () => {
       this.windowScrolled = this.windowScrolled = window.pageYOffset > 450;
     });
+  }
+
+  ngAfterContentChecked(): void {
+    this.changeDetector.detectChanges();
   }
 
   scrollToTop() {

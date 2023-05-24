@@ -5,7 +5,7 @@ import { AngularFireStorage } from "@angular/fire/compat/storage";
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from "@angular/router";
 
 import { map, switchMap } from 'rxjs/operators';
-import { BehaviorSubject, combineLatest, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, of, Subject } from 'rxjs';
 import firebase from 'firebase/compat/app';
 
 import IClip from '../models/clip.model';
@@ -17,6 +17,7 @@ export class ClipService implements Resolve<IClip | null>{
   public clipsCollection: AngularFirestoreCollection<IClip>;
   pageClips: IClip[] = [];
   pendingReq = false;
+  searchClips: Subject<any> = new Subject()
 
   constructor(
     private db: AngularFirestore,
@@ -81,6 +82,7 @@ export class ClipService implements Resolve<IClip | null>{
     let query = this.clipsCollection.ref
       .orderBy('timestamp', 'desc')
       .limit(6);
+
     const { length } = this.pageClips;
 
     if (length) {
@@ -149,5 +151,25 @@ export class ClipService implements Resolve<IClip | null>{
       }),
       map(snapshot => (snapshot as QuerySnapshot<IClip>))
     );
+  }
+
+  async getSearchClips() {
+    if (this.pendingReq) {
+      return;
+    }
+
+    this.pendingReq = true;
+    let query = this.clipsCollection.ref
+      .orderBy('timestamp', 'desc');
+    const snapshot = await query.get();
+
+    snapshot.forEach(doc => {
+      this.pageClips.push({
+        docID: doc.id,
+        ...doc.data()
+      });
+    });
+
+    this.pendingReq = false;
   }
 }
