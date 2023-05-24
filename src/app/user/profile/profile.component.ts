@@ -95,6 +95,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   }
 
   async updateUser() {
+    this.informationForm.disable();
     this.showAlert = true;
     this.alertMsg = 'Vui lòng chờ! Tài khoản của bạn đang được cập nhật';
     this.alertColor = 'blue';
@@ -106,9 +107,10 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       // this.initFormValue();
     } catch (e) {
       console.error(e);
-      this.alertMsg = 'An unexpected error occurred. Please try again later.';
+      this.alertMsg = 'Cập nhật thất bại! Vui lòng thử lại';
       this.alertColor = 'red';
       this.inSubmission = false;
+      this.informationForm .enable();
       return;
     }
 
@@ -118,6 +120,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.showAlert = false;
       this.inSubmission = false;
+      this.informationForm.enable();
     }, 1000);
   }
 
