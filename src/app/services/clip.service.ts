@@ -127,17 +127,17 @@ export class ClipService implements Resolve<IClip | null>{
       );
   }
 
-  addFavorite(id: string, uid: string) {
+  updateFavorites(id: string, favorites: string[]) {
     return this.clipsCollection.doc(id).update({
-      favorite: uid
+      favorites
     });
   }
 
-  removeFavorite(id: string) {
-    return this.clipsCollection.doc(id).update({
-      favorite: firebase.firestore.FieldValue.delete()
-    });
-  }
+  // removeFavorite(id: string) {
+  //   return this.clipsCollection.doc(id).update({
+  //     favorite: firebase.firestore.FieldValue.delete()
+  //   });
+  // }
 
   getFavoriteClips() {
     return this.auth.user.pipe(
@@ -146,7 +146,7 @@ export class ClipService implements Resolve<IClip | null>{
           return of([]);
         }
 
-        const query = this.clipsCollection.ref.where('favorite', '==', user.uid);
+        const query = this.clipsCollection.ref.where('favorites', 'array-contains', user.uid);
         return query.get();
       }),
       map(snapshot => (snapshot as QuerySnapshot<IClip>))

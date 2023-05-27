@@ -48,13 +48,21 @@ export class ClipComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (!this.clip.favorite) {
-      await this.clipService.addFavorite(this.clip.docID, this.user.uid);
-      this.clip.favorite = this.user.uid;
-    } else {
-      await this.clipService.removeFavorite(this.clip.docID);
-      delete this.clip.favorite;
+    if (!this.clip.favorites) {
+      this.clip.favorites = [];
     }
+
+    if (this.clip.favorites.indexOf(this.user.uid) < 0) {
+      this.clip.favorites.push(this.user.uid);
+    } else {
+      this.clip.favorites = this.clip.favorites.filter(element => element !== this.user?.uid);
+    }
+
+    await this.clipService.updateFavorites(this.clip.docID, this.clip.favorites);
+  }
+
+  hasFavorite() {
+    return this.clip && this.clip.favorites && this.user && this.clip.favorites.indexOf(this.user.uid) > -1;
   }
 
   ngOnDestroy() {
