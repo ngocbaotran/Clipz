@@ -12,7 +12,7 @@ import { ClipService } from '../../services/clip.service';
 })
 export class FavoritesComponent implements OnInit {
   clips: IClip[] = [];
-  copied = false;
+  docIDCopied = '';
 
   constructor(
     private clipService: ClipService
@@ -31,7 +31,19 @@ export class FavoritesComponent implements OnInit {
     });
   }
 
-  copyToClipboard() {
-    // code
+  async copyToClipboard($event: MouseEvent, docID: string | undefined) {
+    $event.preventDefault();
+
+    if (!docID) {
+      return;
+    }
+
+    const url = `${location.origin}/clip/${docID}`;
+    await navigator.clipboard.writeText(url);
+    this.docIDCopied = docID;
+
+    setTimeout(() => {
+      this.docIDCopied = '';
+    }, 2500);
   }
 }
