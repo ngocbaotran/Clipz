@@ -1,7 +1,7 @@
 <!-- Main Content -->
 <section class="container mx-auto my-8 bg-secondary p-6">
   <div class="rounded relative flex flex-col">
-    <div class="font-bold mb-6">Upload Video</div>
+    <h1 class="text-indigo-400 text-2xl font-bold mb-6">Đăng Video</h1>
 
     <ng-container *ngIf="!ffmpegService.isReady; else uploadEditorCtr">
       <span class="material-icons text-center text-6xl p-8 animate-spin">settings</span>
@@ -16,7 +16,7 @@
              class="w-full px-10 py-40 rounded text-center cursor-pointer border border-dashed
           border-gray-400 transition duration-500 hover:text-white
           hover:bg-indigo-400 hover:border-indigo-400 hover:border-solid text-xl">
-          <h5>Drop your file here (mp4 only!)</h5>
+          <h5>Kéo thả tệp vào đây (.mp4)</h5>
           <span *ngIf="ffmpegService.isRunning" class="material-icons text-center text-6xl p-8 animate-spin">
             autorenew
           </span>
@@ -33,7 +33,7 @@
         <!-- Form -->
         <form [formGroup]="uploadForm" (ngSubmit)="uploadFile()">
           <!-- Screenshots -->
-          <h2 class="mb-4 text-xl">Select a Thumbnail</h2>
+          <h2 class="mb-4 text-xl">Chọn hình đại diện cho Video</h2>
           <div class="flex justify-between">
             <ng-container *ngFor="let screenshot of screenshots">
               <div class="border-8 cursor-pointer" [ngClass]="{'border-green-400': screenshot === selectedScreenshot,
@@ -45,7 +45,7 @@
 
           <!-- Title -->
           <div class="mt-4">
-            <label class="block text-xl mb-4">Title</label>
+            <label class="block text-xl mb-4">Tiêu đề</label>
             <app-input [control]="title" placeholder="Enter Title"></app-input>
           </div>
 
