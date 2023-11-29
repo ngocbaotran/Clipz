@@ -27,7 +27,7 @@ export class ClipComponent implements OnInit, OnDestroy {
   constructor(
     public route: ActivatedRoute,
     private clipService: ClipService,
-    private angularFireAuth: AngularFireAuth
+    private angularFireAuth: AngularFireAuth,
   ) {
     this.userSubscription = angularFireAuth.user.subscribe(user => this.user = user);
   }
@@ -66,6 +66,16 @@ export class ClipComponent implements OnInit, OnDestroy {
   hasFavorite() {
     return this.clip && this.clip.favorites && this.user && this.clip.favorites.indexOf(this.user.uid) > -1;
   }
+
+  shareVideo() {
+    if (!this.clip?.url) {
+      return;
+    }
+
+    const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(this.clip.url)}`;
+    window.open(shareUrl, '_blank');
+  }
+
 
   ngOnDestroy() {
     this.userSubscription?.unsubscribe();

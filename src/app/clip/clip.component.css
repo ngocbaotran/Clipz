@@ -62,3 +62,18 @@
   font-size: 2em;
 }
 /* Video.js CSS END */
+
+.share-button-group {
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+.share-button:hover .share-button-group {
+  opacity: 1;
+  visibility: visible;
+}
