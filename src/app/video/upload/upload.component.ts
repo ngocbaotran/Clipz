@@ -38,8 +38,14 @@ export class UploadComponent implements OnDestroy {
     Validators.required,
     Validators.minLength(3)
   ]);
+
+  description = new FormControl('', [
+    Validators.maxLength(500)
+  ]);
+
   uploadForm = new FormGroup({
-    title: this.title
+    title: this.title,
+    description: this.description
   });
 
   constructor(
@@ -121,6 +127,7 @@ export class UploadComponent implements OnDestroy {
             uid: this.user?.uid as string,
             displayName: this.user?.displayName as string,
             title: this.title.value,
+            description: this.description.value,
             fileName: `${clipFileName}.mp4`,
             url: clipURL,
             screenshotURL,

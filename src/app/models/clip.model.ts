@@ -11,4 +11,5 @@ export default interface IClip {
   screenshotURL: string;
   screenshotFileName: string;
   favorites?: string[];
+  description?: string;
 }
