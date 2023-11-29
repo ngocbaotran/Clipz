@@ -18,6 +18,7 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { ClipsListComponent } from './clips-list/clips-list.component';
 import { SharedModule } from './shared/shared.module';
 import { SearchComponent } from './search/search.component';
+import { CommentComponent } from './comment/comment.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { SearchComponent } from './search/search.component';
     NotFoundComponent,
     ClipsListComponent,
     SearchComponent,
+    CommentComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,7 +41,7 @@ import { SearchComponent } from './search/search.component';
     AppRoutingModule,
     AngularFireStorageModule,
     SharedModule,
-    FormsModule
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

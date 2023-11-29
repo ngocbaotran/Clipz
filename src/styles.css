@@ -1,3 +1,6 @@
+@import "~ng-zorro-antd/comment/style/index.min.css";
+@import "~ng-zorro-antd/avatar/style/index.min.css";
+
 /* You can add global styles to this file, and also import other style files */
 @tailwind base;
 @tailwind components;
@@ -714,3 +717,23 @@ strong {
   }
 }
 /* Loader */
+
+/* customize scroll bar */
+.scroll-view-none::-webkit-scrollbar {
+  width: 0;
+}
+
+.scroll-view::-webkit-scrollbar {
+  width: 3px;
+}
+
+.scroll-view::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+.scroll-view::-webkit-scrollbar-thumb {
+  background-color: rgb(129 140 248);
+  border-radius: 10px;
+}
+

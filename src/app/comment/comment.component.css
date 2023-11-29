@@ -1,0 +1,36 @@
+.t-comments-box .add-comment {
+  min-height: 90px;
+  background-color: #161d31;
+  border-radius: 6px 6px 0 0;
+}
+
+.t-comments-box .add-comment textarea {
+  width: calc(100% - 2.875rem);
+  min-height: 70px;
+}
+
+.t-comments-box .comment .comment-action,
+.t-comments-box .add-comment input::placeholder {
+  color: #c3ccd3;
+}
+
+.t-comments-box .add-comment .comment-send {
+  transform: translateY(-50%) rotate(320deg);
+}
+
+.t-comments-box .comment-list {
+  max-height: 500px;
+}
+
+.t-comments-box .comment .comment-detail {
+  color: #768791;
+}
+
+.t-comments-box .feedback {
+  margin-left: calc(50px + 1rem);
+}
+
+.t-comments-box .comment-level-3 {
+  margin-left: calc((50px + 1rem) * 2);
+}
+

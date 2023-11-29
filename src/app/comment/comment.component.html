@@ -1,0 +1,101 @@
+<div class="p-2 t-comments-box">
+  <section class="box-border rounded-md mt-8 border border-solid border-indigo-400 comment-create">
+    <form [formGroup]="commentForm" (ngSubmit)="send()" class="comment-create-form">
+      <div class="relative p-3 add-comment">
+      <textarea
+        class="border-0 outline-0 resize-none bg-transparent text-white h-auto p-0 form-control form-control-sm scroll-view-none"
+        placeholder="Viết bình luận..." [formControl]="message"></textarea>
+        <button type="submit" [disabled]="commentForm.invalid || !commentForm.value.message || inSubmission"
+                class="text-indigo-400 rounded absolute top-1/2 right-2.5 w-9 h-9 hover:text-indigo-300 transition disabled:text-opacity-50 disabled:cursor-not-allowed comment-send">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full">
+            <path
+              d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z"/>
+          </svg>
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <section class="flex flex-row justify-between pb-2.5 mb-3 mt-11 border-b border-solid border-indigo-200">
+    <div class="text-sm tracking-wider uppercase grow text-indigo-200">
+      <span>{{ totalComments }} Bình luận</span>
+    </div>
+  </section>
+
+  <button *ngIf="totalComments > 0" class="font-bold text-xs text-indigo-200 hover:underline" (click)="loadMoreComments()">Xem thêm bình luận</button>
+
+  <section class="relative overflow-y-scroll pr-5 comment-list scroll-view">
+    <div *ngFor="let comment of comments; trackBy: trackByCommentId"
+         class="pb-4 border-b border-solid border-indigo-200 border-opacity-50">
+      <div class="flex mt-4 text-sm mt-4 comment">
+        <!-- Hiển thị thông tin comment -->
+        <img [src]="'./assets/image/default-user-avatar.png'" alt="" class="w-12 h-12 rounded mr-4"/>
+        <div class="flex-1">
+          <div class="leading-none comment-label">
+            <span class="text-indigo-400 text-base font-medium comment-name">{{ comment.displayName }} &#183; </span>
+            <span class="font-thin comment-detail">{{ comment.timestamp | fbTimestamp }}</span>
+          </div>
+          <div class="text-white mt-0.5 comment-content">{{ comment.message }}</div>
+          <div class="mt-1.5 leading-tight flex items-center comment-action">
+            <span class="text-sm mr-1 comment-detail">{{ comment.likes }}</span>
+            <button (click)="likeComment(comment)" class="mr-4 hover:text-indigo-400"
+                    [ngClass]="{'text-indigo-400': comment.likesByUser}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                <path
+                  d="M1 8.25a1.25 1.25 0 112.5 0v7.5a1.25 1.25 0 11-2.5 0v-7.5zM11 3V1.7c0-.268.14-.526.395-.607A2 2 0 0114 3c0 .995-.182 1.948-.514 2.826-.204.54.166 1.174.744 1.174h2.52c1.243 0 2.261 1.01 2.146 2.247a23.864 23.864 0 01-1.341 5.974C17.153 16.323 16.072 17 14.9 17h-3.192a3 3 0 01-1.341-.317l-2.734-1.366A3 3 0 006.292 15H5V8h.963c.685 0 1.258-.483 1.612-1.068a4.011 4.011 0 012.166-1.73c.432-.143.853-.386 1.011-.814.16-.432.248-.9.248-1.388z"/>
+              </svg>
+            </button>
+            <span class="text-sm mr-1 comment-detail">{{ comment.replies?.length }}</span>
+            <button (click)="toggleReply(comment)" class="mr-4 hover:text-indigo-400"
+                    [ngClass]="{'text-indigo-400': comment.isReply}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                <path fill-rule="evenodd"
+                      d="M3.43 2.524A41.29 41.29 0 0110 2c2.236 0 4.43.18 6.57.524 1.437.231 2.43 1.49 2.43 2.902v5.148c0 1.413-.993 2.67-2.43 2.902a41.102 41.102 0 01-3.55.414c-.28.02-.521.18-.643.413l-1.712 3.293a.75.75 0 01-1.33 0l-1.713-3.293a.783.783 0 00-.642-.413 41.108 41.108 0 01-3.55-.414C1.993 13.245 1 11.986 1 10.574V5.426c0-1.413.993-2.67 2.43-2.902z"
+                      clip-rule="evenodd"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div *ngFor="let feed of comment.replies" class="flex comment text-sm mt-4 feedback">
+        <div class="flex mr-4 flex-col items-center">
+          <img [src]="'./assets/image/default-user-avatar.png'" alt="" class="w-12 h-12 rounded"/>
+          <div class="bg-indigo-200 bg-opacity-50 w-px h-full self-center"></div>
+        </div>
+        <div class="flex-1">
+          <div class="leading-none comment-label">
+            <span class="text-indigo-400 text-base font-medium comment-name">{{ feed.displayName }} &#183; </span>
+            <span class="font-thin comment-detail">{{ feed.timestamp | fbTimestamp }}</span>
+          </div>
+          <div class="text-white mt-0.5 comment-content">{{ feed.message }}</div>
+          <div class="text-xs leading-tight comment-action h-5">
+            <!--            <button class="mr-4 hover:text-indigo-400">-->
+            <!--              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">-->
+            <!--                <path d="M1 8.25a1.25 1.25 0 112.5 0v7.5a1.25 1.25 0 11-2.5 0v-7.5zM11 3V1.7c0-.268.14-.526.395-.607A2 2 0 0114 3c0 .995-.182 1.948-.514 2.826-.204.54.166 1.174.744 1.174h2.52c1.243 0 2.261 1.01 2.146 2.247a23.864 23.864 0 01-1.341 5.974C17.153 16.323 16.072 17 14.9 17h-3.192a3 3 0 01-1.341-.317l-2.734-1.366A3 3 0 006.292 15H5V8h.963c.685 0 1.258-.483 1.612-1.068a4.011 4.011 0 012.166-1.73c.432-.143.853-.386 1.011-.814.16-.432.248-.9.248-1.388z" />-->
+            <!--              </svg>-->
+            <!--            </button>-->
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="comment.isReply" [id]="comment.docId"
+           class="box-border rounded-md mt-2.5 border border-solid border-indigo-400 comment-create reply-box">
+        <form [formGroup]="replyForm" (ngSubmit)="reply(comment)" class="comment-create-form">
+          <div class="relative p-3 add-comment">
+              <textarea
+                class="border-0 outline-0 resize-none bg-transparent text-white h-auto p-0 form-control form-control-sm scroll-view-none"
+                placeholder="Viết bình luận..." [formControl]="replyMessage"></textarea>
+            <button type="submit" [disabled]="replyForm.invalid || !replyForm.value.replyMessage || inSubmission"
+                    class="text-indigo-400 rounded absolute top-1/2 right-2.5 w-9 h-9 hover:text-indigo-300 transition disabled:text-opacity-50 disabled:cursor-not-allowed comment-send">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full">
+                <path
+                  d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z"/>
+              </svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</div>

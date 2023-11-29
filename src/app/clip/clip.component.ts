@@ -40,6 +40,8 @@ export class ClipComponent implements OnInit, OnDestroy {
         src: this.clip.url,
         type: 'video/mp4'
       });
+
+      window.scrollTo(0, 0);
     });
   }
 
