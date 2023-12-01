@@ -5,6 +5,7 @@ import { AngularFirestore, AngularFirestoreCollection } from "@angular/fire/comp
 
 import { Observable, of } from "rxjs";
 import { delay, filter, map, switchMap } from "rxjs/operators";
+import firebase from 'firebase/compat/app';
 
 import IUser from "../models/user.model";
 
@@ -52,7 +53,8 @@ export class AuthService {
       name: userData.name,
       email: userData.email,
       age: userData.age,
-      phoneNumber: userData.phoneNumber
+      phoneNumber: userData.phoneNumber,
+      created: firebase.firestore.FieldValue.serverTimestamp()
     });
 
     await userCred.user.updateProfile({

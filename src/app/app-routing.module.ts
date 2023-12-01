@@ -29,6 +29,10 @@ const routes: Routes = [
     component: SearchComponent
   },
   {
+    path: 'admin',
+    loadChildren: async () => (await import('./admin/admin.module')).AdminModule
+  },
+  {
     path: '', // dashboard/manage, dashboard/upload
     loadChildren: async () => (await import('./video/video.module')).VideoModule
   },

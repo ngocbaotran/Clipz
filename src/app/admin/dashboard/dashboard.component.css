@@ -1,0 +1,45 @@
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.data span {
+  position: relative;
+  padding: 0.5rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 9999px;
+}
+
+.data span svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+}
+
+.title-text {
+  color: #374151;
+  font-size: 18px;
+}
+
+.data {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.title-value {
+  color: #1F2937;
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  font-weight: 700;
+  text-align: left;
+}
+
+.chart-container {
+  box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
+}

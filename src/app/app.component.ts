@@ -2,6 +2,8 @@ import { AfterContentChecked, ChangeDetectorRef, Component, OnInit } from '@angu
 
 import { AuthService } from "./services/auth.service";
 import { AppService } from './app.service';
+import { NavigationEnd, Router, RouterEvent } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -9,16 +11,30 @@ import { AppService } from './app.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit, AfterContentChecked {
+  isInAdminModule: boolean = false;
   windowScrolled = false;
 
   constructor(
     public auth: AuthService,
     public appService: AppService,
     private changeDetector: ChangeDetectorRef,
+    private router: Router
   ) {
   }
 
   ngOnInit() {
+    // this.router.events.pipe(
+    //   filter((event) => event instanceof NavigationEnd)
+    // ).subscribe(() => {
+    //   this.isInAdminModule = this.router.url.includes('/admin');
+    // });
+    this.router.events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd)
+    ).subscribe((event: RouterEvent & NavigationEnd) => {
+      this.isInAdminModule = event.url.includes('/admin');
+    });
+
+
     window.addEventListener('scroll', () => {
       this.windowScrolled = this.windowScrolled = window.pageYOffset > 450;
     });
