@@ -1,9 +1,9 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import Chart from 'chart.js/auto';
 import { combineLatest } from 'rxjs';
 
-import { AdminService } from '../../services/admin.service';
+import { AdminService } from '../../../services/admin.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,11 +19,9 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private adminService: AdminService,
-    private renderer: Renderer2
   ) { }
 
   ngOnInit(): void {
-    this.renderer.setStyle(document.body, 'padding-bottom', '0');
     this.adminService.getTotalUsers().subscribe((totalUsers) => {
       this.totalUsers = totalUsers;
     });

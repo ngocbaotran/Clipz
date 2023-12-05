@@ -1,8 +1,11 @@
 <div class="flex h-screen bg-gray-100">
   <!-- Sidebar -->
-  <div class="sidebar flex flex-col w-64 bg-white h-full border-r" [ngClass]="{'w-0': !isSidebarVisible}">
-    <div class="fixed flex flex-col top-0 left-0 w-64 bg-white h-full border-r" [ngClass]="{'w-0': !isSidebarVisible, 'border-r-0': !isSidebarVisible}">
-      <div *ngIf="isSidebarVisible" class="flex items-center justify-center h-20">
+  <div class="sidebar flex flex-col bg-white h-full" [ngClass]="{'w-64': isSidebarVisible, 'w-0': !isSidebarVisible,
+    'border-r-0': !isSidebarVisible, 'border-r': isSidebarVisible}">
+    <div class="fixed flex flex-col top-0 left-0 bg-white h-full sidebar-container" [ngClass]="{'w-64': isSidebarVisible, 'w-0': !isSidebarVisible,
+    'border-r-0': !isSidebarVisible, 'border-r': isSidebarVisible}">
+      <div class="flex items-center justify-center h-20 sidebar-inner" [ngClass]="{'-translate-x-32': !isSidebarVisible, 'translate-x-0':
+      isSidebarVisible}">
         <a class="text-4xl text-indigo-400 font-bold uppercase mr-4">
           <span class="flex items-center">
             Clip
@@ -18,7 +21,7 @@
             </div>
           </li>
           <li>
-            <a routerLink="/admin" routerLinkActive="bg-gray-50 text-gray-800 border-indigo-500"
+            <a routerLink="dashboard" routerLinkActive="bg-gray-50 text-gray-800 border-indigo-500"
                class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 hover:border-indigo-500 pr-6">
             <span class="inline-flex justify-center items-center ml-4">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
@@ -27,12 +30,13 @@
             </a>
           </li>
           <li>
-            <a href="#" class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 hover:border-indigo-500 pr-6">
+            <a
+              class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 border-l-4 pr-6 text-opacity-50 cursor-not-allowed">
             <span class="inline-flex justify-center items-center ml-4">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
             </span>
               <span class="ml-2 text-sm tracking-wide truncate">Inbox</span>
-              <span class="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-indigo-500 bg-indigo-50 rounded-full">New</span>
+              <span class="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-indigo-500 bg-indigo-50 rounded-full text-opacity-50">New</span>
             </a>
           </li>
           <li>
@@ -66,12 +70,12 @@
             </a>
           </li>
           <li>
-            <a href="#" class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4  hover:border-indigo-500 pr-6">
-            <span class="inline-flex justify-center items-center ml-4">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-            </span>
-              <span class="ml-2 text-sm tracking-wide truncate">Clients</span>
-              <span class="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-green-500 bg-green-50 rounded-full">15</span>
+            <a routerLink="user" routerLinkActive="bg-gray-50 text-gray-800 border-indigo-500"
+               class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 hover:border-indigo-500 pr-6">
+              <span class="inline-flex justify-center items-center ml-4">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+              </span>
+              <span class="ml-2 text-sm tracking-wide truncate">User</span>
             </a>
           </li>
           <li class="px-5">
@@ -112,15 +116,37 @@
   </div>
 
   <!-- Main Content -->
-  <div class="flex-1 flex flex-col overflow-hidden">
+  <div class="relative flex-1 flex flex-col overflow-hidden">
     <!-- Header -->
     <header class="bg-gray-800 border-b p-6">
-      <svg (click)="isSidebarVisible = !isSidebarVisible" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+      <svg (click)="toggleSidebar()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
            stroke="currentColor" class="w-6 h-6 cursor-pointer">
         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
       </svg>
     </header>
 
-    <app-dashboard></app-dashboard>
+    <router-outlet></router-outlet>
+
+    <div *ngIf="adminService.pendingReq" class="fixed bg-black w-full h-full left-0 opacity-50"></div>
+    <div *ngIf="adminService.pendingReq" class="absolute top-1/2 left-1/2 spinner">
+      <div class="blobs">
+        <div class="blob-center"></div>
+        <div class="blob"></div>
+        <div class="blob"></div>
+        <div class="blob"></div>
+        <div class="blob"></div>
+        <div class="blob"></div>
+        <div class="blob"></div>
+      </div>
+      <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+        <defs>
+          <filter id="goo">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur"></feGaussianBlur>
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="goo"></feColorMatrix>
+            <feBlend in="SourceGraphic" in2="goo"></feBlend>
+          </filter>
+        </defs>
+      </svg>
+    </div>
   </div>
 </div>

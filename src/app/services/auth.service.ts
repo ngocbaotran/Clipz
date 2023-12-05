@@ -54,7 +54,8 @@ export class AuthService {
       email: userData.email,
       age: userData.age,
       phoneNumber: userData.phoneNumber,
-      created: firebase.firestore.FieldValue.serverTimestamp()
+      created: firebase.firestore.FieldValue.serverTimestamp(),
+      status: 'active'
     });
 
     await userCred.user.updateProfile({
