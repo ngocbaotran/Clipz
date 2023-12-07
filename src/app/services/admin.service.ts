@@ -70,7 +70,8 @@ export class AdminService {
 
     this.pendingReq = true;
     let query = this.usersCollection.ref
-      .orderBy('created', 'asc')
+      .where('status', '!=', 'inactive')
+      .orderBy('status').orderBy('created', 'asc')
       .limit(7);
 
     const { length } = this.pageUsers;
@@ -130,7 +131,7 @@ export class AdminService {
 
   deleteUser(user: IUser): Promise<void> {
     return this.usersCollection.doc(user.docID).update({
-      status: user.status
+      status: 'inactive'
     });
   }
 }
