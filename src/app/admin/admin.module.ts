@@ -9,6 +9,7 @@ import { DashboardComponent } from './pages';
 import { AdminComponent } from './pages';
 import { UserComponent } from './pages';
 import { SharedModule } from '../shared/shared.module';
+import { LoginComponent } from './pages/login/login.component';
 
 
 
@@ -17,6 +18,7 @@ import { SharedModule } from '../shared/shared.module';
     DashboardComponent,
     AdminComponent,
     UserComponent,
+    LoginComponent,
   ],
   imports: [
     CommonModule,
