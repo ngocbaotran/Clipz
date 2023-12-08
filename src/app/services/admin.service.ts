@@ -1,21 +1,23 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import IUser from '../models/user.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AdminService {
   usersCollection: AngularFirestoreCollection<IUser>;
   pageUsers: IUser[] = [];
   pendingReq = false;
 
   constructor(
-    private firestore: AngularFirestore
+    private firestore: AngularFirestore,
+    private afAuth: AngularFireAuth,
+    private router: Router
   ) {
     this.usersCollection = firestore.collection('users');
   }
@@ -112,6 +114,7 @@ export class AdminService {
     const snapshot = await query.get();
 
     if (snapshot.empty) {
+      this.pageUsers = [];
       this.pendingReq = false;
       return;
     }
@@ -119,10 +122,12 @@ export class AdminService {
     const users: IUser[] = [];
 
     snapshot.forEach(doc => {
-      users.push({
-        docID: doc.id,
-        ...doc.data()
-      });
+      if (doc.data().status !== 'inactive') {
+        users.push({
+          docID: doc.id,
+          ...doc.data()
+        });
+      }
     });
 
     this.pageUsers = users;
@@ -133,5 +138,14 @@ export class AdminService {
     return this.usersCollection.doc(user.docID).update({
       status: 'inactive'
     });
+  }
+
+  public async logout($event?: Event) {
+    if ($event) {
+      $event.preventDefault();
+    }
+
+    await this.afAuth.signOut();
+    await this.router.navigateByUrl('/admin/login');
   }
 }

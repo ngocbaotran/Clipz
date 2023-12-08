@@ -25,7 +25,6 @@ const routes: Routes = [
       authGuardPipe: redirectUnauthorizedToHome
     },
     canActivate: [AngularFireAuthGuard],
-    canActivateChild: [AngularFireAuthGuard]
   },
 ];
 

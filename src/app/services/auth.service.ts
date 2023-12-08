@@ -9,13 +9,11 @@ import firebase from 'firebase/compat/app';
 
 import IUser from "../models/user.model";
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AuthService {
   private usersCollection: AngularFirestoreCollection<IUser>;
   public isAuthenticated$: Observable<boolean>;
-  public isAuthenticatedWithDelay$: Observable<boolean>;
+  public isAuthenticatedWithDelay$: Observable<boolean> | undefined;
   public redirect = false;
 
   constructor(
@@ -28,7 +26,6 @@ export class AuthService {
     this.isAuthenticated$ = auth.user.pipe(
       map(user => !!user)
     );
-    this.isAuthenticatedWithDelay$ = this.isAuthenticated$.pipe(delay(1000));
     this.router.events.pipe(
       filter(e => e instanceof NavigationEnd),
       map(e => this.route.firstChild),
@@ -55,7 +52,8 @@ export class AuthService {
       age: userData.age,
       phoneNumber: userData.phoneNumber,
       created: firebase.firestore.FieldValue.serverTimestamp(),
-      status: 'active'
+      status: 'active',
+      role: 'user'
     });
 
     await userCred.user.updateProfile({

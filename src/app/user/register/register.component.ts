@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from "../../services/auth.service";
 import { RegisterValidators } from '../validators/register-validators';
 import { EmailTaken } from '../validators/email-taken';
+import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-register',
@@ -64,6 +65,7 @@ export class RegisterComponent {
 
     try {
       await this.auth.createUser(this.registerForm.value);
+      this.auth.isAuthenticatedWithDelay$ = this.auth.isAuthenticated$.pipe(delay(1000));
     } catch (e) {
       console.error(e);
       this.alertMsg = 'An unexpected error occurred. Please try again later.';

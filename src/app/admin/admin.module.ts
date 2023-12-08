@@ -9,7 +9,8 @@ import { DashboardComponent } from './pages';
 import { AdminComponent } from './pages';
 import { UserComponent } from './pages';
 import { SharedModule } from '../shared/shared.module';
-import { LoginComponent } from './pages/login/login.component';
+import { LoginComponent } from './pages';
+import { AdminService } from '../services/admin.service';
 
 
 
@@ -26,6 +27,7 @@ import { LoginComponent } from './pages/login/login.component';
     NgChartsModule,
     SharedModule,
     FormsModule
-  ]
+  ],
+  providers: [AdminService]
 })
 export class AdminModule { }

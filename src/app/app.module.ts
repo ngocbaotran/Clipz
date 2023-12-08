@@ -19,6 +19,7 @@ import { ClipsListComponent } from './clips-list/clips-list.component';
 import { SharedModule } from './shared/shared.module';
 import { SearchComponent } from './search/search.component';
 import { CommentComponent } from './comment/comment.component';
+import { AuthService } from './services/auth.service';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,7 @@ import { CommentComponent } from './comment/comment.component';
     SharedModule,
     FormsModule,
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent],
   exports: [NotFoundComponent]
 })

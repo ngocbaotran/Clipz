@@ -9,4 +9,5 @@ export default interface IUser {
   phoneNumber: string;
   created: firebase.firestore.FieldValue;
   status: string;
+  role: string;
 }
