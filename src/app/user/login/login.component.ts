@@ -37,38 +37,19 @@ export class LoginComponent implements OnInit {
     this.inSubmission = true;
 
     try {
-      const userCredential = await this.auth.signInWithEmailAndPassword(
+      await this.auth.signInWithEmailAndPassword(
         this.credentials.email,
         this.credentials.password
       );
-      const user = userCredential.user;
-
-      if (user) {
-        const userDoc = await this.db.collection('users').doc(user.uid).get().toPromise();
-        const userData = userDoc.data() as IUser;
-
-        if (!userData) {
-          await this.authService.logout();
-          this.inSubmission = false;
-          this.alertMsg = 'Không có quyền truy cập vào tài khoản này.';
-          this.alertColor = 'red';
-        } else if (userData.status === 'inactive') {
-          await this.authService.logout();
-          this.inSubmission = false;
-          this.alertMsg = 'Tài khoản không tồn tại.';
-          this.alertColor = 'red';
-        } else {
-          this.alertMsg = 'Success! You are now logged in.';
-          this.alertColor = 'green';
-        }
-
-        this.authService.isAuthenticatedWithDelay$ = this.authService.isAuthenticated$.pipe(delay(1000));
-      }
+      this.authService.isAuthenticatedWithDelay$ = this.authService.isAuthenticated$.pipe(delay(1000));
     } catch (e) {
       this.inSubmission = false;
       this.alertMsg = 'An unexpected error occurred. Please try again later.';
       this.alertColor = 'red';
       return;
     }
+
+    this.alertMsg = 'Success! You are now logged in.';
+    this.alertColor = 'green';
   }
 }

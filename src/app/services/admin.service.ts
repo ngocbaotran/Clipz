@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { getAuth, deleteUser } from "firebase/auth";
 
 import IUser from '../models/user.model';
 
@@ -72,8 +73,7 @@ export class AdminService {
 
     this.pendingReq = true;
     let query = this.usersCollection.ref
-      .where('status', '!=', 'inactive')
-      .orderBy('status').orderBy('created', 'asc')
+      .orderBy('created', 'asc')
       .limit(7);
 
     const { length } = this.pageUsers;
@@ -134,10 +134,22 @@ export class AdminService {
     this.pendingReq = false;
   }
 
-  deleteUser(user: IUser): Promise<void> {
-    return this.usersCollection.doc(user.docID).update({
-      status: 'inactive'
-    });
+  // deleteUser(user: IUser): Promise<void> {
+  //   return this.usersCollection.doc(user.docID).update({
+  //     status: 'inactive'
+  //   });
+  // }
+  async deleteUser(user: IUser) {
+    const userCredential = await this.afAuth.signInWithEmailAndPassword(
+      user.email,
+      'Iknowmyname8994@'
+    );
+
+    if (userCredential && userCredential.user) {
+      await deleteUser(userCredential.user);
+      await this.afAuth.signInWithEmailAndPassword('admin@test.com', 'Iknowmyname8994@');
+      await this.usersCollection.doc(user.docID).delete();
+    }
   }
 
   public async logout($event?: Event) {
