@@ -12,7 +12,7 @@ import IUser from "../models/user.model";
 @Injectable()
 export class AuthService {
   private usersCollection: AngularFirestoreCollection<IUser>;
-  public isAuthenticated$: Observable<boolean>;
+  public isAuthenticated$: Observable<boolean> | undefined;
   public isAuthenticatedWithDelay$: Observable<boolean> | undefined;
   public redirect = false;
 
@@ -23,9 +23,6 @@ export class AuthService {
     private route: ActivatedRoute
   ) {
     this.usersCollection = db.collection('users');
-    this.isAuthenticated$ = auth.user.pipe(
-      map(user => !!user)
-    );
     this.router.events.pipe(
       filter(e => e instanceof NavigationEnd),
       map(e => this.route.firstChild),

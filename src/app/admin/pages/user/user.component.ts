@@ -17,6 +17,7 @@ export class UserComponent implements OnInit {
   searchString: string = '';
   userSelected: IUser | null = null;
   isVisibleModal: boolean = false;
+  modalType: string = '';
 
   constructor(
     public adminService: AdminService,
@@ -68,26 +69,58 @@ export class UserComponent implements OnInit {
     this.searchString = '';
   }
 
-  deleteAction(userInfo: IUser) {
+  onAction(modalType: string, userInfo: IUser) {
+    this.modalType = modalType;
     this.userSelected = userInfo;
     this.isVisibleModal = true;
+  }
+
+  cancelModal() {
+    this.modalType = '';
+    this.userSelected = null;
+    this.isVisibleModal = false;
   }
 
   async confirmModal($event: Event) {
     $event.preventDefault();
 
     if (!this.userSelected) {
+      this.modalType = '';
       this.isVisibleModal = false;
       return;
     }
 
-    await this.adminService.deleteUser(this.userSelected);
-    this.adminService.pageUsers.forEach((element, index) => {
-      if (element.docID == this.userSelected?.docID) {
-        this.adminService.pageUsers.splice(index, 1);
-      }
-    });
+    switch(this.modalType) {
+      case 'delete':
+        await this.adminService.deleteUser(this.userSelected);
+        this.adminService.pageUsers.forEach((element, index) => {
+          if (element.docID == this.userSelected?.docID) {
+            this.adminService.pageUsers.splice(index, 1);
+          }
+        });
+        break;
+      case 'block':
+        await this.adminService.blockUser(this.userSelected);
+        this.adminService.pageUsers.forEach((element, index) => {
+          if (element.docID == this.userSelected?.docID) {
+            element.status = 'suspended'
+          }
+        });
+        break;
+      case 'edit':
+        await this.adminService.unlockUser(this.userSelected);
+        this.adminService.pageUsers.forEach((element, index) => {
+          if (element.docID == this.userSelected?.docID) {
+            element.status = 'active'
+          }
+        });
+        break;
+      default:
+        // code block
+    }
 
+    this.modalType = '';
+    this.userSelected = null;
     this.isVisibleModal = false;
   }
 }

@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-
 import { AngularFireAuth } from "@angular/fire/compat/auth";
+
+import { delay, map } from 'rxjs/operators';
+
 import IUser from '../../models/user.model';
 import { AuthService } from '../../services/auth.service';
-import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -28,6 +29,7 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // do nothing
   }
 
   async login() {
@@ -37,9 +39,27 @@ export class LoginComponent implements OnInit {
     this.inSubmission = true;
 
     try {
-      await this.auth.signInWithEmailAndPassword(
+      const userCredential = await this.auth.signInWithEmailAndPassword(
         this.credentials.email,
         this.credentials.password
+      );
+      const user = userCredential.user;
+
+      if (user) {
+        const userDoc = await this.db.collection('users').doc(user.uid).get().toPromise();
+        const userData = userDoc.data() as IUser;
+
+        if (userData && userData.status === 'suspended') {
+          await this.authService.logout();
+          this.inSubmission = false;
+          this.alertMsg = 'Tài khoản đang tạm khoá.';
+          this.alertColor = 'red';
+          return;
+        }
+      }
+
+      this.authService.isAuthenticated$ = this.auth.user.pipe(
+        map(user => !!user)
       );
       this.authService.isAuthenticatedWithDelay$ = this.authService.isAuthenticated$.pipe(delay(1000));
     } catch (e) {

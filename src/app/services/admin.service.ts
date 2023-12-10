@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { getAuth, deleteUser } from "firebase/auth";
+import { deleteUser } from "firebase/auth";
 
 import IUser from '../models/user.model';
 
@@ -14,6 +14,7 @@ export class AdminService {
   usersCollection: AngularFirestoreCollection<IUser>;
   pageUsers: IUser[] = [];
   pendingReq = false;
+  private ps: string = 'Iknowmyname8994@';
 
   constructor(
     private firestore: AngularFirestore,
@@ -134,22 +135,29 @@ export class AdminService {
     this.pendingReq = false;
   }
 
-  // deleteUser(user: IUser): Promise<void> {
-  //   return this.usersCollection.doc(user.docID).update({
-  //     status: 'inactive'
-  //   });
-  // }
   async deleteUser(user: IUser) {
     const userCredential = await this.afAuth.signInWithEmailAndPassword(
       user.email,
-      'Iknowmyname8994@'
+      this.ps
     );
 
     if (userCredential && userCredential.user) {
       await deleteUser(userCredential.user);
-      await this.afAuth.signInWithEmailAndPassword('admin@test.com', 'Iknowmyname8994@');
+      await this.afAuth.signInWithEmailAndPassword('admin@test.com', this.ps);
       await this.usersCollection.doc(user.docID).delete();
     }
+  }
+
+  blockUser(user: IUser): Promise<void> {
+    return this.usersCollection.doc(user.docID).update({
+      status: 'suspended'
+    });
+  }
+
+  unlockUser(user: IUser): Promise<void> {
+    return this.usersCollection.doc(user.docID).update({
+      status: 'active'
+    });
   }
 
   public async logout($event?: Event) {

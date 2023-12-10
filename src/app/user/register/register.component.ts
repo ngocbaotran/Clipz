@@ -4,7 +4,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from "../../services/auth.service";
 import { RegisterValidators } from '../validators/register-validators';
 import { EmailTaken } from '../validators/email-taken';
-import { delay } from 'rxjs/operators';
+import {delay, map} from 'rxjs/operators';
+import {AngularFireAuth} from "@angular/fire/compat/auth";
 
 @Component({
   selector: 'app-register',
@@ -53,7 +54,8 @@ export class RegisterComponent {
 
   constructor(
     private auth: AuthService,
-    private emailTaken: EmailTaken
+    private emailTaken: EmailTaken,
+    private afAuth: AngularFireAuth
   ) {
   }
 
@@ -65,6 +67,9 @@ export class RegisterComponent {
 
     try {
       await this.auth.createUser(this.registerForm.value);
+      this.auth.isAuthenticated$ = this.afAuth.user.pipe(
+        map(user => !!user)
+      );
       this.auth.isAuthenticatedWithDelay$ = this.auth.isAuthenticated$.pipe(delay(1000));
     } catch (e) {
       console.error(e);
