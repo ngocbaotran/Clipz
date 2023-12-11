@@ -36,7 +36,7 @@
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mb-3 shadow-md">
       <thead class="bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
       <tr>
-        <th scope="col" class="px-6 py-3">#</th>
+        <th scope="col" class="px-6 py-3">UID</th>
         <th scope="col" class="px-6 py-3">Email</th>
         <th scope="col" class="px-6 py-3">Ngày Tạo</th>
         <th scope="col" class="px-6 py-3">Trạng Thái</th>
@@ -50,7 +50,7 @@
       <ng-container *ngIf="adminService.pageUsers.length > 0">
         <tr *ngFor="let info of adminService.pageUsers; let i = index"
             class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-          <td class="px-6 py-4">{{ i + 1 }}</td>
+          <td class="px-6 py-4 overflow-hidden max-w-xs">{{ info.docID }}</td>
           <td class="px-6 py-4">{{ info.email }}</td>
           <td class="px-6 py-4">{{ info.created | fbTimestamp }}</td>
           <td class="px-6 py-4">
