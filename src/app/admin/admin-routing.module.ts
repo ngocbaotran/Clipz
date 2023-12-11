@@ -3,9 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { AngularFireAuthGuard, redirectUnauthorizedTo } from "@angular/fire/compat/auth-guard";
 
-import { DashboardComponent, LoginComponent } from './pages';
-import { AdminComponent } from './pages';
-import { UserComponent } from './pages';
+import { AdminComponent, DashboardComponent, LoginComponent, UserComponent, VideoComponent } from './pages';
 
 const redirectUnauthorizedToHome = () => redirectUnauthorizedTo('/admin/login')
 
@@ -19,6 +17,7 @@ const routes: Routes = [
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'user', component: UserComponent },
+      { path: 'video', component: VideoComponent },
     ],
     data: {
       authOnly: true,

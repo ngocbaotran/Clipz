@@ -8,11 +8,14 @@ import { map } from 'rxjs/operators';
 import { deleteUser } from "firebase/auth";
 
 import IUser from '../models/user.model';
+import IClip from '../models/clip.model';
 
 @Injectable()
 export class AdminService {
   usersCollection: AngularFirestoreCollection<IUser>;
+  clipsCollection: AngularFirestoreCollection<IClip>;
   pageUsers: IUser[] = [];
+  pageClips: IClip[] = [];
   pendingReq = false;
   private ps: string = 'Iknowmyname8994@';
 
@@ -22,6 +25,7 @@ export class AdminService {
     private router: Router
   ) {
     this.usersCollection = firestore.collection('users');
+    this.clipsCollection = firestore.collection('clips');
   }
 
   getTotalUsers(): Observable<number> {
@@ -33,7 +37,7 @@ export class AdminService {
   }
 
   getTotalClips(): Observable<number> {
-    return this.firestore.collection('clips').get().pipe(
+    return this.clipsCollection.get().pipe(
       map((querySnapshot) => querySnapshot.size)
     );
   }
@@ -123,12 +127,10 @@ export class AdminService {
     const users: IUser[] = [];
 
     snapshot.forEach(doc => {
-      if (doc.data().status !== 'inactive') {
-        users.push({
-          docID: doc.id,
-          ...doc.data()
-        });
-      }
+      users.push({
+        docID: doc.id,
+        ...doc.data()
+      });
     });
 
     this.pageUsers = users;
@@ -167,5 +169,47 @@ export class AdminService {
 
     await this.afAuth.signOut();
     await this.router.navigateByUrl('/admin/login');
+  }
+
+  async getClips(option?: string) {
+    if (this.pendingReq) {
+      return;
+    }
+
+    this.pendingReq = true;
+    let query = this.clipsCollection.ref
+      .orderBy('created', 'asc')
+      .limit(7);
+
+    const { length } = this.pageClips;
+
+    if (length) {
+      const lastDocID = this.pageClips[length - 1].docID;
+      const lastDoc = await this.clipsCollection
+        .doc(lastDocID)
+        .get()
+        .toPromise();
+
+      if (option) {
+        if (option === 'next') {
+          query = query.startAfter(lastDoc);
+        } else {
+          query = query.endBefore(lastDoc);
+        }
+      }
+    }
+
+    const snapshot = await query.get();
+    const clips: IClip[] = [];
+
+    snapshot.forEach(doc => {
+      clips.push({
+        docID: doc.id,
+        ...doc.data()
+      });
+    });
+
+    this.pageClips = clips;
+    this.pendingReq = false;
   }
 }

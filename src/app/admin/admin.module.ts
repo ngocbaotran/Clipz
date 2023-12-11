@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { NgChartsModule } from 'ng2-charts';
 
 import { AdminRoutingModule } from './admin-routing.module';
-import { DashboardComponent } from './pages';
+import { DashboardComponent, VideoComponent } from './pages';
 import { AdminComponent } from './pages';
 import { UserComponent } from './pages';
 import { SharedModule } from '../shared/shared.module';
@@ -20,6 +20,7 @@ import { AdminService } from '../services/admin.service';
     AdminComponent,
     UserComponent,
     LoginComponent,
+    VideoComponent,
   ],
   imports: [
     CommonModule,

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
 import { AdminService } from '../../../services/admin.service';
@@ -10,7 +10,7 @@ import IUser from '../../../models/user.model';
   styleUrls: ['./user.component.css'],
   providers: [DatePipe]
 })
-export class UserComponent implements OnInit {
+export class UserComponent implements OnInit, OnDestroy {
   pageSize: number = 7;
   currentPage: number = 1;
   totalPages: number = 0;
@@ -122,5 +122,9 @@ export class UserComponent implements OnInit {
     this.modalType = '';
     this.userSelected = null;
     this.isVisibleModal = false;
+  }
+
+  ngOnDestroy() {
+    this.adminService.pageUsers = [];
   }
 }
