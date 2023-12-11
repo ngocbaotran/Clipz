@@ -36,10 +36,10 @@
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mb-3 shadow-md">
       <thead class="bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
       <tr>
-        <th scope="col" class="px-6 py-3">UID</th>
         <th scope="col" class="px-6 py-3">Email</th>
         <th scope="col" class="px-6 py-3">Ngày Tạo</th>
         <th scope="col" class="px-6 py-3">Trạng Thái</th>
+        <th scope="col" class="px-6 py-3">UID</th>
         <th scope="col" class="px-6 py-3">
           Thao Tác
           <!-- <span class="sr-only">Edit</span> -->
@@ -50,19 +50,21 @@
       <ng-container *ngIf="adminService.pageUsers.length > 0">
         <tr *ngFor="let info of adminService.pageUsers; let i = index"
             class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-          <td class="px-6 py-4 overflow-hidden max-w-xs">{{ info.docID }}</td>
           <td class="px-6 py-4">{{ info.email }}</td>
           <td class="px-6 py-4">{{ info.created | fbTimestamp }}</td>
           <td class="px-6 py-4">
             <div class="flex items-center">
-<!--              <span class="dot w-2 h-2 rounded-full inline-block mr-2"-->
-<!--                    [ngClass]="{'bg-green-500': info.status === 'active', 'bg-red-500': info.status === 'suspended'}">-->
-<!--              </span>-->
+              <!--              <span class="dot w-2 h-2 rounded-full inline-block mr-2"-->
+              <!--                    [ngClass]="{'bg-green-500': info.status === 'active', 'bg-red-500': info.status === 'suspended'}">-->
+              <!--              </span>-->
               <span *ngIf="info.status === 'active'; else suspended" class="bg-green-500 rounded-md p-1.5 text-white">Có hiệu lực</span>
               <ng-template #suspended>
                 <span class="bg-red-500 rounded-md p-1.5 text-white">Tạm khóa</span>
               </ng-template>
             </div>
+          </td>
+          <td class="px-6 py-4 overflow-hidden max-w-xs">
+            <div class="truncate">{{ info.docID }}</div>
           </td>
           <td class="px-6 py-4 text-right">
             <div class="flex">

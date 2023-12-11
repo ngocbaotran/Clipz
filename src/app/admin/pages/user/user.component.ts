@@ -61,10 +61,14 @@ export class UserComponent implements OnInit, OnDestroy {
       return;
     }
 
-    await this.adminService.getUserByField({
-      field: 'email',
-      value: this.searchString
-    });
+    if (this.searchString.includes('@')) {
+      await this.adminService.getUserByField({
+        field: 'email',
+        value: this.searchString
+      });
+    } else {
+      await this.adminService.getUserByUid(this.searchString);
+    }
 
     this.searchString = '';
   }
