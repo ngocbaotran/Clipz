@@ -11,6 +11,7 @@ import { UserComponent } from './pages';
 import { SharedModule } from '../shared/shared.module';
 import { LoginComponent } from './pages';
 import { AdminService } from '../services/admin.service';
+import { ClipComponent } from './components';
 
 
 
@@ -21,6 +22,7 @@ import { AdminService } from '../services/admin.service';
     UserComponent,
     LoginComponent,
     VideoComponent,
+    ClipComponent,
   ],
   imports: [
     CommonModule,

@@ -18,6 +18,7 @@ export class VideoComponent implements OnInit, OnDestroy {
   userSelected: IUser | null = null;
   isVisibleModal: boolean = false;
   modalType: string = '';
+  showAlert: boolean = false;
 
   constructor(
     public adminService: AdminService
@@ -67,6 +68,21 @@ export class VideoComponent implements OnInit, OnDestroy {
     });
 
     this.searchString = '';
+  }
+
+  async copyToClipboard($event: MouseEvent, uid: string | undefined) {
+    $event.preventDefault();
+
+    if (!uid) {
+      return;
+    }
+
+    await navigator.clipboard.writeText(uid);
+    this.showAlert = true;
+
+    setTimeout(() => {
+      this.showAlert = false;
+    }, 2000);
   }
 
   ngOnDestroy() {

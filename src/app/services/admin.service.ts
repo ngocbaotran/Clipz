@@ -137,6 +137,26 @@ export class AdminService {
     this.pendingReq = false;
   }
 
+  async getUserByUid(uid: string): Promise<void> {
+    this.pendingReq = true;
+    const userRef = this.usersCollection.ref.doc(uid);
+    const doc = await userRef.get();
+
+    if (!doc.exists) {
+      this.pageUsers = [];
+      this.pendingReq = false;
+      return;
+    }
+
+    const user: IUser = {
+      docID: doc.id,
+      ...doc.data() as IUser
+    };
+
+    this.pageUsers = [user];
+    this.pendingReq = false;
+  }
+
   async deleteUser(user: IUser) {
     const userCredential = await this.afAuth.signInWithEmailAndPassword(
       user.email,
@@ -178,7 +198,7 @@ export class AdminService {
 
     this.pendingReq = true;
     let query = this.clipsCollection.ref
-      .orderBy('created', 'asc')
+      .orderBy('timestamp', 'asc')
       .limit(7);
 
     const { length } = this.pageClips;

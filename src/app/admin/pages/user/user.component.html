@@ -1,4 +1,4 @@
-<main class="flex-1 overflow-x-hidden p-4">
+<main class="flex-1 overflow-x-hidden p-10">
   <div class="flex items-center space-x-4 mb-6 justify-between">
     <h1 class="text-3xl text-indigo-800 font-semibold">Người Dùng</h1>
   </div>
@@ -57,9 +57,9 @@
               <!--              <span class="dot w-2 h-2 rounded-full inline-block mr-2"-->
               <!--                    [ngClass]="{'bg-green-500': info.status === 'active', 'bg-red-500': info.status === 'suspended'}">-->
               <!--              </span>-->
-              <span *ngIf="info.status === 'active'; else suspended" class="bg-green-500 rounded-md p-1.5 text-white">Có hiệu lực</span>
+              <span *ngIf="info.status === 'active'; else suspended" class="bg-green-500 rounded-md px-2 py-1.5 text-white">Có hiệu lực</span>
               <ng-template #suspended>
-                <span class="bg-red-500 rounded-md p-1.5 text-white">Tạm khóa</span>
+                <span class="bg-red-500 rounded-md px-2 py-1.5 text-white">Tạm khóa</span>
               </ng-template>
             </div>
           </td>
