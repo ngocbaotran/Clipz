@@ -15,6 +15,7 @@ import IClip from '../models/clip.model';
 })
 export class ClipService implements Resolve<IClip | null>{
   public clipsCollection: AngularFirestoreCollection<IClip>;
+  public clipsPendingCollection: AngularFirestoreCollection<IClip>;
   pageClips: IClip[] = [];
   pendingReq = false;
   searchClips: Subject<any> = new Subject()
@@ -26,10 +27,13 @@ export class ClipService implements Resolve<IClip | null>{
     private router: Router
   ) {
     this.clipsCollection = db.collection('clips');
+    this.clipsPendingCollection = db.collection('clipsPending');
   }
 
-  createClip(data: IClip): Promise<DocumentReference<IClip>> {
-    return this.clipsCollection.add(data);
+  async createClip(data: IClip): Promise<DocumentReference<IClip>> {
+    const clipDocRef = await this.clipsPendingCollection.add(data);
+    await this.clipsCollection.doc(clipDocRef.id).set(data);
+    return clipDocRef;
   }
 
   getUserClips(sort$: BehaviorSubject<string>) {
@@ -62,7 +66,7 @@ export class ClipService implements Resolve<IClip | null>{
     });
   }
 
-  async deleteClip(clip: IClip) {
+  async deleteClip(clip: IClip, isClipPending = false) {
     const clipRef = this.storage.ref(`clips/${clip.fileName}`);
     const screenshotRef = this.storage.ref(
       `screenshots/${clip.screenshotFileName}`
@@ -71,6 +75,10 @@ export class ClipService implements Resolve<IClip | null>{
     await clipRef.delete();
     await screenshotRef.delete();
     await this.clipsCollection.doc(clip.docID).delete();
+
+    if (isClipPending) {
+      await this.clipsPendingCollection.doc(clip.docID).delete();
+    }
   }
 
   async getClips() {
@@ -80,6 +88,7 @@ export class ClipService implements Resolve<IClip | null>{
 
     this.pendingReq = true;
     let query = this.clipsCollection.ref
+      .where('status', '==', 'approved')
       .orderBy('timestamp', 'desc')
       .limit(6);
 

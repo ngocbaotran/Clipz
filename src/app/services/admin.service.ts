@@ -14,6 +14,7 @@ import IClip from '../models/clip.model';
 export class AdminService {
   usersCollection: AngularFirestoreCollection<IUser>;
   clipsCollection: AngularFirestoreCollection<IClip>;
+  clipsPendingCollection: AngularFirestoreCollection<IClip>;
   pageUsers: IUser[] = [];
   pageClips: IClip[] = [];
   pendingReq = false;
@@ -26,6 +27,7 @@ export class AdminService {
   ) {
     this.usersCollection = firestore.collection('users');
     this.clipsCollection = firestore.collection('clips');
+    this.clipsPendingCollection = firestore.collection('clipsPending');
   }
 
   getTotalUsers(): Observable<number> {
@@ -42,13 +44,21 @@ export class AdminService {
     );
   }
 
+  getTotalClipsPending(): Observable<number> {
+    return this.clipsPendingCollection
+      .valueChanges()
+      .pipe(
+        map(docs => docs.length)
+      );
+  }
+
   getTotalUploadedThisMonth(): Observable<number> {
     const today = new Date();
     const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
     const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
 
     return this.firestore
-      .collection('videos', (ref) =>
+      .collection('clips', (ref) =>
         ref
           .where('timestamp', '>=', firstDayOfMonth)
           .where('timestamp', '<=', lastDayOfMonth)
@@ -230,6 +240,92 @@ export class AdminService {
     });
 
     this.pageClips = clips;
+    this.pendingReq = false;
+  }
+
+  async getClipsPending(option?: string) {
+    if (this.pendingReq) {
+      return;
+    }
+
+    this.pendingReq = true;
+    let query = this.clipsPendingCollection.ref
+      .orderBy('timestamp', 'asc')
+      .limit(7);
+
+    const { length } = this.pageClips;
+
+    if (length) {
+      const lastDocID = this.pageClips[length - 1].docID;
+      const lastDoc = await this.clipsPendingCollection
+        .doc(lastDocID)
+        .get()
+        .toPromise();
+
+      if (option) {
+        if (option === 'next') {
+          query = query.startAfter(lastDoc);
+        } else {
+          query = query.endBefore(lastDoc);
+        }
+      }
+    }
+
+    const snapshot = await query.get();
+    const clips: IClip[] = [];
+
+    snapshot.forEach(doc => {
+      clips.push({
+        docID: doc.id,
+        ...doc.data()
+      });
+    });
+
+    this.pageClips = clips;
+    this.pendingReq = false;
+  }
+
+  async getClipsByField(info: { field: string, value: string }): Promise<void> {
+    this.pendingReq = true;
+    const query = this.clipsCollection.ref.where(info.field, '==', info.value);
+    const snapshot = await query.get();
+
+    if (snapshot.empty) {
+      this.pageClips = [];
+      this.pendingReq = false;
+      return;
+    }
+
+    const clips: IClip[] = [];
+
+    snapshot.forEach(doc => {
+      clips.push({
+        docID: doc.id,
+        ...doc.data()
+      });
+    });
+
+    this.pageClips = clips;
+    this.pendingReq = false;
+  }
+
+  async getClipsById(cid: string): Promise<void> {
+    this.pendingReq = true;
+    const clipRef = this.clipsCollection.ref.doc(cid);
+    const doc = await clipRef.get();
+
+    if (!doc.exists) {
+      this.pageClips = [];
+      this.pendingReq = false;
+      return;
+    }
+
+    const clip: IClip = {
+      docID: doc.id,
+      ...doc.data() as IClip
+    };
+
+    this.pageClips = [clip];
     this.pendingReq = false;
   }
 }

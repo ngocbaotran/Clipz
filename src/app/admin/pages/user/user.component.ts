@@ -18,6 +18,15 @@ export class UserComponent implements OnInit, OnDestroy {
   userSelected: IUser | null = null;
   isVisibleModal: boolean = false;
   modalType: string = '';
+  showAlert: boolean = false;
+
+  hoverState: {
+    userHovered: IUser | null
+    isIconHovered: boolean
+  } = {
+    isIconHovered: false,
+    userHovered: null
+  };
 
   constructor(
     public adminService: AdminService,
@@ -105,7 +114,7 @@ export class UserComponent implements OnInit, OnDestroy {
         break;
       case 'block':
         await this.adminService.blockUser(this.userSelected);
-        this.adminService.pageUsers.forEach((element, index) => {
+        this.adminService.pageUsers.forEach((element) => {
           if (element.docID == this.userSelected?.docID) {
             element.status = 'suspended'
           }
@@ -113,7 +122,7 @@ export class UserComponent implements OnInit, OnDestroy {
         break;
       case 'edit':
         await this.adminService.unlockUser(this.userSelected);
-        this.adminService.pageUsers.forEach((element, index) => {
+        this.adminService.pageUsers.forEach((element) => {
           if (element.docID == this.userSelected?.docID) {
             element.status = 'active'
           }
@@ -126,6 +135,21 @@ export class UserComponent implements OnInit, OnDestroy {
     this.modalType = '';
     this.userSelected = null;
     this.isVisibleModal = false;
+  }
+
+  async copyToClipboard($event: MouseEvent, uid: string | undefined) {
+    $event.preventDefault();
+
+    if (!uid) {
+      return;
+    }
+
+    await navigator.clipboard.writeText(uid);
+    this.showAlert = true;
+
+    setTimeout(() => {
+      this.showAlert = false;
+    }, 2000);
   }
 
   ngOnDestroy() {

@@ -97,4 +97,11 @@ export class ManageComponent implements OnInit {
       this.docIDCopied = '';
     }, 2500);
   }
+
+  quickView($event: Event, clip: IClip) {
+    $event.preventDefault();
+    this.activeClip = clip;
+    this.modal.register('quickViewClip');
+    this.modal.toggleModal('quickViewClip');
+  }
 }

@@ -9,6 +9,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { EditComponent } from './edit/edit.component';
 import { SafeURLPipe } from './pipes/safe-url.pipe';
 import { FavoritesComponent } from './favorites/favorites.component';
+import { QuickViewComponent } from './quick-view/quick-view.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { FavoritesComponent } from './favorites/favorites.component';
     UploadComponent,
     EditComponent,
     SafeURLPipe,
-    FavoritesComponent
+    FavoritesComponent,
+    QuickViewComponent
   ],
   imports: [
     CommonModule,

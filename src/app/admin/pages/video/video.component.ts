@@ -3,6 +3,7 @@ import { DatePipe } from '@angular/common';
 
 import { AdminService } from '../../../services/admin.service';
 import IClip from '../../../models/clip.model';
+import { ClipService } from '../../../services/clip.service';
 
 @Component({
   selector: 'app-video',
@@ -13,26 +14,37 @@ import IClip from '../../../models/clip.model';
 export class VideoComponent implements OnInit, OnDestroy {
   pageSize: number = 7;
   currentPage: number = 1;
+  totalClipsPending: number = 0;
   totalPages: number = 0;
   searchString: string = '';
   selectedClip: IClip | null = null;
   modalType: string = '';
   showAlert: boolean = false;
-  clipHovered: IClip | null = null;
+  searchType: string = 'cid';
 
   hoverState: {
+    clipHovered: IClip | null
     isIconHovered: boolean
   } = {
-    isIconHovered: false
+    isIconHovered: false,
+    clipHovered: null
   };
 
   constructor(
-    public adminService: AdminService
+    public adminService: AdminService,
+    private clipService: ClipService
   ) { }
 
   async ngOnInit(): Promise<void> {
     await this.adminService.getClips();
+    this.getTotalClipsPending();
     this.getTotalPages();
+  }
+
+  getTotalClipsPending() {
+    this.adminService.getTotalClipsPending().subscribe((totalClips) => {
+      this.totalClipsPending = totalClips;
+    });
   }
 
   getTotalPages() {
@@ -68,10 +80,14 @@ export class VideoComponent implements OnInit, OnDestroy {
       return;
     }
 
-    await this.adminService.getUserByField({
-      field: 'email',
-      value: this.searchString
-    });
+    if (this.searchType === 'uid') {
+      await this.adminService.getClipsByField({
+        field: 'uid',
+        value: this.searchString
+      });
+    } else {
+      await this.adminService.getClipsById(this.searchString);
+    }
 
     this.searchString = '';
   }
@@ -97,6 +113,25 @@ export class VideoComponent implements OnInit, OnDestroy {
 
   closeClipDetail() {
     this.selectedClip = null;
+  }
+
+  async showClipsPending() {
+    await this.adminService.getClipsPending();
+  }
+
+  async updateSearchType(event: Event) {
+    const { value } = (event.target as HTMLSelectElement);
+    this.searchType = value;
+  }
+
+  async rejectClip(clip: IClip) {
+    await this.clipService.deleteClip(clip, true);
+    this.closeClipDetail();
+    this.adminService.pageClips.forEach((element, index) => {
+      if (element.docID == clip.docID) {
+        this.adminService.pageClips.splice(index, 1);
+      }
+    });
   }
 
   ngOnDestroy() {

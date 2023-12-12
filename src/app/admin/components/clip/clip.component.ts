@@ -16,6 +16,7 @@ export class ClipComponent implements OnInit {
   @ViewChild('videoPlayer', {static: true}) target?: ElementRef;
   @Input() selectedClip?: IClip;
   @Output() clipClosedEvent = new EventEmitter<string>();
+  @Output() clipRejectedEvent = new EventEmitter<IClip>();
   player?: videojs.Player;
   clip?: IClip;
   userClip?: IUser;
@@ -51,5 +52,9 @@ export class ClipComponent implements OnInit {
           }
         }
       });
+  }
+
+  rejectClip(): void {
+    this.clipRejectedEvent.emit(this.selectedClip);
   }
 }

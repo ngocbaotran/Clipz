@@ -132,18 +132,19 @@ export class UploadComponent implements OnDestroy {
             url: clipURL,
             screenshotURL,
             screenshotFileName: `${clipFileName}.png`,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            status: 'pending'
           };
 
-          const clipDocRef = await this.clipsService.createClip(clip as IClip);
+          await this.clipsService.createClip(clip as IClip);
           console.log(clip);
           this.alertColor = 'green';
-          this.alertMsg = 'Success! Your clip is now ready to share with the world!';
+          this.alertMsg = 'Thành công! Clip của bạn đang được kiểm duyệt. Vui lòng chờ.';
           this.showPercentage = false;
 
-          setTimeout(() => {
-            this.router.navigate(['clip', clipDocRef.id])
-          }, 1000);
+          // setTimeout(() => {
+          //   this.router.navigate(['clip', clipDocRef.id])
+          // }, 1000);
         },
         error: (error) => {
           this.uploadForm.enable();
