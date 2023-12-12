@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
-import IUser from '../../../models/user.model';
 import { AdminService } from '../../../services/admin.service';
+import IClip from '../../../models/clip.model';
 
 @Component({
   selector: 'app-video',
@@ -15,10 +15,16 @@ export class VideoComponent implements OnInit, OnDestroy {
   currentPage: number = 1;
   totalPages: number = 0;
   searchString: string = '';
-  userSelected: IUser | null = null;
-  isVisibleModal: boolean = false;
+  selectedClip: IClip | null = null;
   modalType: string = '';
   showAlert: boolean = false;
+  clipHovered: IClip | null = null;
+
+  hoverState: {
+    isIconHovered: boolean
+  } = {
+    isIconHovered: false
+  };
 
   constructor(
     public adminService: AdminService
@@ -83,6 +89,14 @@ export class VideoComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.showAlert = false;
     }, 2000);
+  }
+
+  showClipDetail(clip: IClip) {
+    this.selectedClip = clip;
+  }
+
+  closeClipDetail() {
+    this.selectedClip = null;
   }
 
   ngOnDestroy() {

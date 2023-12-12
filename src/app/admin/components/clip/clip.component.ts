@@ -1,15 +1,55 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+
+import videojs from 'video.js';
+
+import IClip from '../../../models/clip.model';
+import { AdminService } from '../../../services/admin.service';
+import IUser from '../../../models/user.model';
 
 @Component({
   selector: 'admin-clip',
   templateUrl: './clip.component.html',
-  styleUrls: ['./clip.component.css']
+  styleUrls: ['./clip.component.css'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class ClipComponent implements OnInit {
+  @ViewChild('videoPlayer', {static: true}) target?: ElementRef;
+  @Input() selectedClip?: IClip;
+  @Output() clipClosedEvent = new EventEmitter<string>();
+  player?: videojs.Player;
+  clip?: IClip;
+  userClip?: IUser;
 
-  constructor() { }
+  constructor(
+    public adminService: AdminService
+  ) { }
 
   ngOnInit(): void {
+    this.player = videojs(this.target?.nativeElement);
+    this.clip = this.selectedClip as IClip;
+    this.player?.src({
+      src: this.clip.url,
+      type: 'video/mp4'
+    });
+    this.getUserByUid();
   }
 
+  closeClipDetail(): void {
+    this.clipClosedEvent.emit();
+  }
+
+  getUserByUid() {
+    this.adminService.usersCollection.doc(this.clip?.uid)
+      .get()
+      .subscribe(snapshot => {
+        const data = snapshot.data();
+
+        if (data) {
+          this.userClip = {
+            docID: this.clip?.uid,
+            ...data
+          }
+        }
+      });
+  }
 }
