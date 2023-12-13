@@ -7,6 +7,7 @@ import firebase from 'firebase/compat/app';
 import { ModalService } from '../services/modal.service';
 import { AuthService } from "../services/auth.service";
 import { ClipService } from '../services/clip.service';
+import { delay, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-nav',
@@ -29,6 +30,10 @@ export class NavComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.auth.isAuthenticated$ = this.angularFireAuth.user.pipe(
+      map(user => !!user)
+    );
+    this.auth.isAuthenticatedWithDelay$ = this.auth.isAuthenticated$.pipe(delay(1000));
   }
 
   openModal($event: Event) {
