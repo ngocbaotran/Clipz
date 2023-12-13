@@ -142,9 +142,9 @@ export class UploadComponent implements OnDestroy {
           this.alertMsg = 'Thành công! Clip của bạn đang được kiểm duyệt. Vui lòng chờ.';
           this.showPercentage = false;
 
-          // setTimeout(() => {
-          //   this.router.navigate(['clip', clipDocRef.id])
-          // }, 1000);
+          setTimeout(() => {
+            this.router.navigateByUrl('/manage');
+          }, 1000);
         },
         error: (error) => {
           this.uploadForm.enable();

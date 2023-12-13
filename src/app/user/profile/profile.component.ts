@@ -1,15 +1,16 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import firebase from 'firebase/compat/app';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from "@angular/router"
 
 import { of, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+import firebase from 'firebase/compat/app';
 
 import IUser from '../../models/user.model';
 import { RegisterValidators } from "../validators/register-validators";
-import { AuthService } from "../../services/auth.service";
+import { AuthService } from "../../services/auth.service";;
 
 @Component({
   selector: 'app-profile',
@@ -40,10 +41,7 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
   confirm_password = new FormControl('', [
     Validators.required
   ]);
-  phoneNumber = new FormControl('', [
-    Validators.required,
-    Validators.minLength(10),
-  ]);
+  phoneNumber = new FormControl({ value: '', disabled: true });
 
   informationForm = new FormGroup({
     name: this.name,
@@ -57,7 +55,8 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private auth: AngularFireAuth,
     private firestore: AngularFirestore,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {
     // code
   }
@@ -107,6 +106,8 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
     try {
       await this.user?.updatePassword(this.password.value);
       await this.authService.updateUser(this.informationForm.value, this.user?.uid);
+      await this.authService.logout();
+      await this.router.navigateByUrl('/');
       // this.userData = this.informationForm.value;
       // this.initFormValue();
     } catch (e) {

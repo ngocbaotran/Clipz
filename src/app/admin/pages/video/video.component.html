@@ -194,7 +194,8 @@
     <admin-clip [selectedClip]="selectedClip"
                 (clipClosedEvent)="closeClipDetail()"
                 (clipRejectedEvent)="rejectClip($event)"
-                (clipApprovalEvent)="approveClip($event)">
+                (clipApprovalEvent)="approveClip($event)"
+                (clipSkipEvent)="skipClip($event)">
     </admin-clip>
   </div>
 </main>

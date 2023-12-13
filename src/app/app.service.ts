@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class AppService {
+  isInAdminModule: boolean = false;
   public viewState = {
     isOverLoad: false
   };

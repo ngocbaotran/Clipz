@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 
 import videojs from 'video.js';
 
@@ -11,7 +11,7 @@ import { ModalService } from '../../services/modal.service';
   styleUrls: ['./quick-view.component.css'],
   encapsulation: ViewEncapsulation.None,
 })
-export class QuickViewComponent implements OnInit, OnDestroy {
+export class QuickViewComponent implements OnInit {
   @Input() activeClip?: IClip;
   @ViewChild('videoPlayer', {static: true}) target?: ElementRef;
   player?: videojs.Player;
@@ -30,7 +30,8 @@ export class QuickViewComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
+  closeModal() {
+    this.player?.dispose();
     this.modalService.unregister('quickViewClip');
   }
 }

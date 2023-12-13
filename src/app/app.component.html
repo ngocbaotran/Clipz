@@ -1,4 +1,4 @@
-<app-nav *ngIf="!isInAdminModule"></app-nav>
+<app-nav *ngIf="!appService.isInAdminModule"></app-nav>
 <router-outlet></router-outlet>
 <app-auth-modal *ngIf="!(auth.isAuthenticatedWithDelay$ | async)"></app-auth-modal>
 

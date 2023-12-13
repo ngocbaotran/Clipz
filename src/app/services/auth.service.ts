@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AngularFirestore, AngularFirestoreCollection } from "@angular/fire/compat/firestore";
+import {AngularFirestore, AngularFirestoreCollection, QuerySnapshot} from "@angular/fire/compat/firestore";
 
-import { Observable, of } from "rxjs";
+import {BehaviorSubject, combineLatest, Observable, of} from "rxjs";
 import { filter, map, switchMap } from "rxjs/operators";
 import firebase from 'firebase/compat/app';
 
 import IUser from "../models/user.model";
+import IClip from "../models/clip.model";
 
 @Injectable()
 export class AuthService {
@@ -73,8 +74,31 @@ export class AuthService {
   public async updateUser(userData: IUser, uid: string | undefined) {
     return this.usersCollection.doc(uid).update({
       name: userData.name,
-      age: userData.age,
-      phoneNumber: userData.phoneNumber
+      age: userData.age
     });
+  }
+
+  // checkUserStatus(currentUser: firebase.User): Observable<string> {
+  //   return this.usersCollection.doc(currentUser.uid)
+  //     .valueChanges()
+  //     .pipe(
+  //       map(doc => doc?.status ?? '')
+  //     );
+  // }
+
+  checkUserStatus() {
+    return this.auth.user.pipe(
+      switchMap(user => {
+        if (!user) {
+          return of([]);
+        }
+
+        return this.usersCollection.doc(user.uid)
+          .valueChanges()
+          .pipe(
+            map(doc => doc?.status ?? '')
+          );
+      })
+    );
   }
 }

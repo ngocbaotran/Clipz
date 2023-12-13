@@ -11,7 +11,6 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit, AfterContentChecked {
-  isInAdminModule: boolean = false;
   windowScrolled = false;
 
   constructor(
@@ -31,7 +30,7 @@ export class AppComponent implements OnInit, AfterContentChecked {
     this.router.events.pipe(
       filter((event): event is NavigationEnd => event instanceof NavigationEnd)
     ).subscribe((event: RouterEvent & NavigationEnd) => {
-      this.isInAdminModule = event.url.includes('/admin');
+      this.appService.isInAdminModule = event.url.includes('/admin');
     });
 
 

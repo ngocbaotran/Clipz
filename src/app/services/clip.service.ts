@@ -5,7 +5,7 @@ import { AngularFireStorage } from "@angular/fire/compat/storage";
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from "@angular/router";
 
 import { map, switchMap } from 'rxjs/operators';
-import { BehaviorSubject, combineLatest, of, Subject } from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, of, Subject} from 'rxjs';
 import firebase from 'firebase/compat/app';
 
 import IClip from '../models/clip.model';
@@ -184,9 +184,8 @@ export class ClipService implements Resolve<IClip | null>{
     this.pendingReq = false;
   }
 
-  async updateClipReported(clip: IClip): Promise<DocumentReference<IClip>> {
-    const clipReportedRef = await this.clipsReportedCollection.add(clip);
+  async updateClipReported(clip: IClip) {
+    await this.clipsReportedCollection.doc(clip.docID).set(clip);
     await this.clipsCollection.doc(clip.docID).set(clip);
-    return clipReportedRef;
   }
 }

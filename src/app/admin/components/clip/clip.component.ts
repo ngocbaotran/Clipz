@@ -18,6 +18,7 @@ export class ClipComponent implements OnInit {
   @Output() clipClosedEvent = new EventEmitter<string>();
   @Output() clipRejectedEvent = new EventEmitter<IClip>();
   @Output() clipApprovalEvent = new EventEmitter<IClip>();
+  @Output() clipSkipEvent = new EventEmitter<IClip>();
   player?: videojs.Player;
   clip?: IClip;
   userClip?: IUser;
@@ -61,5 +62,9 @@ export class ClipComponent implements OnInit {
 
   approveClip(): void {
     this.clipApprovalEvent.emit(this.selectedClip);
+  }
+
+  skipClip() {
+    this.clipSkipEvent.emit(this.selectedClip);
   }
 }

@@ -34,6 +34,14 @@ export class NavComponent implements OnInit {
       map(user => !!user)
     );
     this.auth.isAuthenticatedWithDelay$ = this.auth.isAuthenticated$.pipe(delay(1000));
+
+    this.auth.checkUserStatus().subscribe((status) => {
+      if (status === 'suspended' || status === 'blocked') {
+        console.log('sub');
+        this.auth.logout();
+        this.router.navigateByUrl('/');
+      }
+    });
   }
 
   openModal($event: Event) {

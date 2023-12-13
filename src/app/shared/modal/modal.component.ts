@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 
 import { ModalService } from '../../services/modal.service';
 
@@ -10,6 +10,7 @@ import { ModalService } from '../../services/modal.service';
 })
 export class ModalComponent implements OnInit, OnDestroy {
   @Input() modalID = '';
+  @Output() closedEvent = new EventEmitter<string>();
 
   constructor(
     public modalService: ModalService,
@@ -28,5 +29,6 @@ export class ModalComponent implements OnInit, OnDestroy {
 
   closeModal() {
     this.modalService.toggleModal(this.modalID);
+    this.closedEvent.emit();
   }
 }

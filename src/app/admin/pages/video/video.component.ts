@@ -151,6 +151,17 @@ export class VideoComponent implements OnInit, OnDestroy {
     this.closeClipDetail();
   }
 
+  async skipClip(clip: IClip) {
+    await this.adminService.clipsReportedCollection.doc(clip.docID).delete();
+    await this.adminService.clipsCollection.doc(clip.docID).update({ flag: 0 });
+    this.closeClipDetail();
+    this.adminService.pageClips.forEach((element, index) => {
+      if (element.docID == clip.docID) {
+        element.flag = 0;
+      }
+    });
+  }
+
   ngOnDestroy() {
     this.adminService.pageClips = [];
     this.adminService.pageUsers = [];

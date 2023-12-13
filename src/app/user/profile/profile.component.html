@@ -15,8 +15,9 @@
             </label>
           </div>
           <div class="md:w-2/3">
-            <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                   type="text" [formControl]="name">
+            <input
+              class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+              type="text" [formControl]="name">
             <ng-container *ngIf="name.touched && name.dirty">
               <p *ngIf="name.errors?.required" class="text-red-400">Vui lòng nhập tên người dùng</p>
               <p *ngIf="name.errors?.minlength" class="text-red-400">
@@ -32,8 +33,9 @@
             </label>
           </div>
           <div class="md:w-2/3">
-            <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 opacity-80 cursor-not-allowed"
-                   [formControl]="email" type="text" [disabled]="true">
+            <input
+              class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 opacity-80 cursor-not-allowed"
+              [formControl]="email" type="text" [disabled]="true">
           </div>
         </div>
         <div class="md:flex md:items-center mb-6">
@@ -43,8 +45,9 @@
             </label>
           </div>
           <div class="md:w-2/3">
-            <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                   type="text" [formControl]="age">
+            <input
+              class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+              type="text" [formControl]="age">
             <ng-container *ngIf="age.touched && age.dirty">
               <p *ngIf="age.errors?.required" class="text-red-400">Vui lòng nhập tuổi</p>
             </ng-container>
@@ -57,27 +60,24 @@
             </label>
           </div>
           <div class="md:w-2/3">
-            <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                   type="text" [formControl]="phoneNumber" [mask]="'(000)000-0000'">
-            <ng-container *ngIf="phoneNumber.touched && phoneNumber.dirty">
-              <p *ngIf="phoneNumber.errors?.required" class="text-red-400">Vui lòng nhập số điện thoại</p>
-              <p *ngIf="phoneNumber.errors?.minlength" class="text-red-400">
-                Số điện thoại phải có ít nhất {{ phoneNumber.errors?.minlength.requiredLength }} ký tự
-              </p>
-            </ng-container>
+            <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700
+              leading-tight focus:outline-none focus:bg-white focus:border-purple-500 opacity-80 cursor-not-allowed"
+              type="text" [formControl]="phoneNumber" [mask]="'(000)000-0000'">
           </div>
         </div>
         <div class="md:flex md:items-center mb-6">
           <div class="md:w-1/3">
-        <span class="block text-gray-200 md:text-left mb-1 md:mb-0 pr-4 text-sm underline cursor-pointer text-indigo-400"
-              (click)="toggleChangePassword()">
+        <span
+          class="block text-gray-200 md:text-left mb-1 md:mb-0 pr-4 text-sm underline cursor-pointer text-indigo-400"
+          (click)="toggleChangePassword()">
           Thay đổi mật khẩu
         </span>
           </div>
         </div>
 
         <!-- Change Password -->
-        <div class="max-h-0 opacity-0" [ngClass]="{'change-password': changePassword}" style="transition: all .3s ease;">
+        <div class="max-h-0 opacity-0" [ngClass]="{'change-password': changePassword}"
+             style="transition: all .3s ease;">
           <div class="md:flex md:items-center mb-6">
             <div class="md:w-1/3">
               <label class="block text-gray-200 font-bold md:text-left mb-1 md:mb-0 pr-4">
@@ -85,8 +85,9 @@
               </label>
             </div>
             <div class="md:w-2/3">
-              <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                     [formControl]="password" type="password">
+              <input
+                class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                [formControl]="password" type="password">
               <ng-container *ngIf="password.touched && password.dirty">
                 <p *ngIf="password.errors?.required" class="text-red-400">Vui lòng nhập mật khẩu mới</p>
                 <p *ngIf="password.errors?.pattern" class="text-red-400">
@@ -102,10 +103,12 @@
               </label>
             </div>
             <div class="md:w-2/3">
-              <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                     [formControl]="confirm_password" type="password">
+              <input
+                class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                [formControl]="confirm_password" type="password">
               <ng-container *ngIf="confirm_password.touched && confirm_password.dirty">
-                <p *ngIf="confirm_password.errors?.required" class="text-red-400">Vui lòng nhập lại mật khẩu xác nhận</p>
+                <p *ngIf="confirm_password.errors?.required" class="text-red-400">Vui lòng nhập lại mật khẩu xác
+                  nhận</p>
                 <p *ngIf="confirm_password.errors?.noMatch" class="text-red-400">
                   Mật khẩu xác nhận không chính xác
                 </p>
@@ -118,15 +121,9 @@
         <!-- Update Button -->
         <div class="md:flex md:items-center">
           <div class="md:w-2/3">
-<!--            <div class="button-borders">-->
-<!--              <button type="submit" [disabled]="(informationForm.invalid && changePassword) || inSubmission"-->
-<!--                      class="primary-button bg-indigo-400 disabled:opacity-50 disabled:cursor-not-allowed"-->
-<!--                      (click)="updateUser()">-->
-<!--                Cập nhật tài khoản-->
-<!--              </button>-->
-<!--            </div>-->
             <button type="submit" [disabled]="(informationForm.invalid && changePassword) || inSubmission"
-                    class="clipz-btn disabled:opacity-50 disabled:cursor-not-allowed bg-indigo-400" (click)="updateUser()">
+                    class="clipz-btn disabled:opacity-50 disabled:cursor-not-allowed bg-indigo-400"
+                    (click)="updateUser()">
               <span>Cập nhật tài khoản</span><i></i>
             </button>
           </div>
@@ -141,11 +138,11 @@
       <a>
         <div class="card flex relative justify-center items-end" [ngClass]="{'img3D': img3D}">
           <div class="wrapper absolute w-full">
-            <img src="./assets/image/dark_rider-cover.jpeg" class="cover-image w-full h-full object-cover" />
+            <img src="./assets/image/dark_rider-cover.jpeg" class="cover-image w-full h-full object-cover"/>
           </div>
-<!--          <img src="./assets/image/dark_rider-title.png" class="title" />-->
+          <!--          <img src="./assets/image/dark_rider-title.png" class="title" />-->
           <div class="text-5xl title flex justify-center items-end text-indigo-400">{{ userData?.name }}</div>
-          <img src="./assets/image/dark_rider-character.webp" class="character" />
+          <img src="./assets/image/dark_rider-character.webp" class="character"/>
         </div>
       </a>
     </div>
