@@ -16,6 +16,7 @@ import IClip from '../models/clip.model';
 export class ClipService implements Resolve<IClip | null>{
   public clipsCollection: AngularFirestoreCollection<IClip>;
   public clipsPendingCollection: AngularFirestoreCollection<IClip>;
+  public clipsReportedCollection: AngularFirestoreCollection<IClip>;
   pageClips: IClip[] = [];
   pendingReq = false;
   searchClips: Subject<any> = new Subject()
@@ -28,6 +29,7 @@ export class ClipService implements Resolve<IClip | null>{
   ) {
     this.clipsCollection = db.collection('clips');
     this.clipsPendingCollection = db.collection('clipsPending');
+    this.clipsReportedCollection = db.collection('clipsReported');
   }
 
   async createClip(data: IClip): Promise<DocumentReference<IClip>> {
@@ -180,5 +182,11 @@ export class ClipService implements Resolve<IClip | null>{
     });
 
     this.pendingReq = false;
+  }
+
+  async updateClipReported(clip: IClip): Promise<DocumentReference<IClip>> {
+    const clipReportedRef = await this.clipsReportedCollection.add(clip);
+    await this.clipsCollection.doc(clip.docID).set(clip);
+    return clipReportedRef;
   }
 }

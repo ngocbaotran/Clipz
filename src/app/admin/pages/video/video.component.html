@@ -13,13 +13,24 @@
   <div class="relative overflow-x-auto sm:rounded-lg">
     <div class="flex items-center mb-2">
       <!-- Notification -->
-      <div *ngIf="totalClipsPending > 0" class="bg-red-50 px-2 py-0.5">
-        <span class="ml-auto text-xs font-medium tracking-wide text-red-500 pulse">
+      <div *ngIf="totalClipsPending > 0" class="bg-blue-50 px-2 py-0.5 mr-2">
+        <span class="ml-auto text-xs font-medium tracking-wide text-blue-500 pulse-process">
           {{ totalClipsPending }} video đang chờ duyệt
         </span>
 
         <button class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg
                 text-xs px-4 py-2 ml-2" (click)="showClipsPending()">
+          Kiểm tra
+        </button>
+      </div>
+
+      <div *ngIf="totalClipsReported > 0" class="bg-red-50 px-2 py-0.5">
+        <span class="ml-auto text-xs font-medium tracking-wide text-red-500 pulse">
+          {{ totalClipsReported }} video bị báo xấu
+        </span>
+
+        <button class="text-white bg-red-700 hover:bg-red-800 focus:outline-none font-medium rounded-lg
+                text-xs px-4 py-2 ml-2" (click)="showClipsReported()">
           Kiểm tra
         </button>
       </div>
@@ -85,7 +96,15 @@
             (mouseenter)="hoverState.clipHovered = clip"
             (mouseleave)="hoverState.clipHovered= null">
           <td class="px-6 py-4 overflow-hidden max-w-xs">
-            <div class="truncate">{{ clip.docID }}</div>
+            <div class="flex items-center">
+              <span class="truncate mr-1">{{ clip.docID }}</span>
+              <span *ngIf="!!clip.flag">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                     class="w-6 h-6 text-red-500">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                </svg>
+              </span>
+            </div>
           </td>
           <td class="px-6 py-4 overflow-hidden max-w-xs">
             <div class="truncate">{{ clip.title }}</div>
@@ -94,11 +113,9 @@
           <td class="px-6 py-4">{{ clip.uid }}</td>
           <td class="px-6 py-4">
             <div class="flex items-center">
-              <span *ngIf="clip.status === 'approved'; else pending" class="bg-green-500 rounded-md px-2 py-1.5 text-white">
-                Đã duyệt
-              </span>
+              <span *ngIf="clip.status === 'approved'; else pending" class="bg-green-500 rounded-md px-2 py-1.5 text-white">Đã duyệt</span>
               <ng-template #pending>
-                <span class="bg-red-500 rounded-md px-2 py-1.5 text-white">Chờ duyệt</span>
+                <span class="bg-blue-500 rounded-md px-2 py-1.5 text-white">Chờ duyệt</span>
               </ng-template>
             </div>
           </td>
@@ -174,7 +191,11 @@
   </div>
 
   <div *ngIf="selectedClip" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-7/12 z-20">
-    <admin-clip [selectedClip]="selectedClip" (clipClosedEvent)="closeClipDetail()" (clipRejectedEvent)="rejectClip($event)"></admin-clip>
+    <admin-clip [selectedClip]="selectedClip"
+                (clipClosedEvent)="closeClipDetail()"
+                (clipRejectedEvent)="rejectClip($event)"
+                (clipApprovalEvent)="approveClip($event)">
+    </admin-clip>
   </div>
 </main>
 

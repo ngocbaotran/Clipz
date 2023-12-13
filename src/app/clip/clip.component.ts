@@ -23,6 +23,7 @@ export class ClipComponent implements OnInit, OnDestroy {
   clip?: IClip;
   userSubscription?: Subscription;
   user: firebase.User | null = null;
+  showAlert: boolean = false;
 
   constructor(
     public route: ActivatedRoute,
@@ -76,6 +77,19 @@ export class ClipComponent implements OnInit, OnDestroy {
     window.open(shareUrl, '_blank');
   }
 
+  async reportVideo() {
+    if (!this.clip) {
+      return;
+    }
+
+    this.clip.flag = (this.clip.flag || 0) + 1;
+    await this.clipService.updateClipReported(this.clip);
+    this.showAlert = true;
+
+    setTimeout(() => {
+      this.showAlert = false;
+    }, 2000);
+  }
 
   ngOnDestroy() {
     this.userSubscription?.unsubscribe();

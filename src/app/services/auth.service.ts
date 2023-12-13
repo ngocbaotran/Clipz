@@ -4,7 +4,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore, AngularFirestoreCollection } from "@angular/fire/compat/firestore";
 
 import { Observable, of } from "rxjs";
-import { delay, filter, map, switchMap } from "rxjs/operators";
+import { filter, map, switchMap } from "rxjs/operators";
 import firebase from 'firebase/compat/app';
 
 import IUser from "../models/user.model";

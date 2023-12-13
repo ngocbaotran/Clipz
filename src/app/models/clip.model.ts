@@ -13,4 +13,5 @@ export default interface IClip {
   favorites?: string[];
   description?: string;
   status: string;
+  flag?: number;
 }

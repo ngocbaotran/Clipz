@@ -2,11 +2,37 @@
   animation: pulse-animation 2s infinite;
 }
 
+.pulse-warning {
+  animation: pulse-animation-warning 2s infinite;
+}
+
+.pulse-process {
+  animation: pulse-animation-process 2s infinite;
+}
+
 @keyframes pulse-animation {
   0% {
     box-shadow: 0 0 0 0 rgb(254 226 226);
   }
   100% {
     box-shadow: 0 0 0 20px rgb(254 242 242);
+  }
+}
+
+@keyframes pulse-animation-warning {
+  0% {
+    box-shadow: 0 0 0 0 rgb(254 249 195);
+  }
+  100% {
+    box-shadow: 0 0 0 20px rgb(254 252 232);
+  }
+}
+
+@keyframes pulse-animation-process {
+  0% {
+    box-shadow: 0 0 0 0 rgb(219 234 254);
+  }
+  100% {
+    box-shadow: 0 0 0 20px rgb(239 246 255);
   }
 }

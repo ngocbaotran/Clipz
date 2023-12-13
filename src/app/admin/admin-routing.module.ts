@@ -15,6 +15,7 @@ const routes: Routes = [
   {
     path: '', component: AdminComponent,
     children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'user', component: UserComponent },
       { path: 'video', component: VideoComponent },

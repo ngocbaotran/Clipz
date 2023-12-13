@@ -15,10 +15,10 @@ export class VideoComponent implements OnInit, OnDestroy {
   pageSize: number = 7;
   currentPage: number = 1;
   totalClipsPending: number = 0;
+  totalClipsReported: number = 0;
   totalPages: number = 0;
   searchString: string = '';
   selectedClip: IClip | null = null;
-  modalType: string = '';
   showAlert: boolean = false;
   searchType: string = 'cid';
 
@@ -38,12 +38,19 @@ export class VideoComponent implements OnInit, OnDestroy {
   async ngOnInit(): Promise<void> {
     await this.adminService.getClips();
     this.getTotalClipsPending();
+    this.getTotalClipsReported();
     this.getTotalPages();
   }
 
   getTotalClipsPending() {
     this.adminService.getTotalClipsPending().subscribe((totalClips) => {
       this.totalClipsPending = totalClips;
+    });
+  }
+
+  getTotalClipsReported() {
+    this.adminService.getTotalClipsReported().subscribe((totalClips) => {
+      this.totalClipsReported = totalClips;
     });
   }
 
@@ -119,6 +126,10 @@ export class VideoComponent implements OnInit, OnDestroy {
     await this.adminService.getClipsPending();
   }
 
+  async showClipsReported() {
+    await this.adminService.getClipsReported();
+  }
+
   async updateSearchType(event: Event) {
     const { value } = (event.target as HTMLSelectElement);
     this.searchType = value;
@@ -132,6 +143,12 @@ export class VideoComponent implements OnInit, OnDestroy {
         this.adminService.pageClips.splice(index, 1);
       }
     });
+  }
+
+  async approveClip(clip: IClip) {
+    await this.adminService.clipsPendingCollection.doc(clip.docID).delete();
+    await this.adminService.clipsCollection.doc(clip.docID).update({ status: 'approved' });
+    this.closeClipDetail();
   }
 
   ngOnDestroy() {

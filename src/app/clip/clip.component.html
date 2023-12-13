@@ -1,10 +1,26 @@
 <!-- Main Content -->
 <section class="container mx-auto my-8 bg-secondary p-6">
   <div class="rounded relative flex flex-col">
+    <div *ngIf="showAlert" class="flex items-center p-4 bg-gray-800 rounded-md fixed right-10">
+      <svg class="flex-shrink-0 w-4 h-4 text-green-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+      </svg>
+      <div class="ms-2 text-sm font-medium">Đã ghi nhận báo cáo vi phạm</div>
+    </div>
+
     <div class="flex justify-between items-center">
       <!-- Title and Uploader -->
       <h1 class="font-bold mb-2 text-3xl">{{ clip?.title }}</h1>
       <div class="flex justify-between items-center">
+        <!-- Report video -->
+        <span *ngIf="clip?.uid !== user?.uid" class="cursor-pointer" (click)="reportVideo()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-9 h-9 mr-6
+                hover:text-indigo-400 transform motion-safe:hover:scale-125">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3v1.5M3 21v-6m0 0l2.77-.693a9 9 0 016.208.682l.108.054a9 9 0 006.086.71l3.114-.732a48.524 48.524 0 01-.005-10.499l-3.11.732a9 9 0 01-6.085-.711l-.108-.054a9 9 0 00-6.208-.682L3 4.5M3 15V4.5" />
+          </svg>
+        </span>
+
+        <!-- Share group -->
         <span class="cursor-pointer mr-6 relative share-button">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                class="w-9 h-9 hover:text-indigo-400 transform motion-safe:hover:scale-125">
@@ -18,6 +34,8 @@
             <img [src]="'./../../assets/image/twitter_twitter logo_icon.png'" alt="" class="h-7 w-7 mx-1.5 opacity-30 cursor-not-allowed">
           </div>
         </span>
+
+        <!-- Like video -->
         <span class="cursor-pointer" (click)="toggleFavorite()">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-9 h-9 transform motion-safe:hover:scale-125"
                [ngClass]="{'text-indigo-400': hasFavorite()}">

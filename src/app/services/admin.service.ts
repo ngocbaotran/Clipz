@@ -15,6 +15,7 @@ export class AdminService {
   usersCollection: AngularFirestoreCollection<IUser>;
   clipsCollection: AngularFirestoreCollection<IClip>;
   clipsPendingCollection: AngularFirestoreCollection<IClip>;
+  clipsReportedCollection: AngularFirestoreCollection<IClip>;
   pageUsers: IUser[] = [];
   pageClips: IClip[] = [];
   pendingReq = false;
@@ -28,6 +29,7 @@ export class AdminService {
     this.usersCollection = firestore.collection('users');
     this.clipsCollection = firestore.collection('clips');
     this.clipsPendingCollection = firestore.collection('clipsPending');
+    this.clipsReportedCollection = firestore.collection('clipsReported');
   }
 
   getTotalUsers(): Observable<number> {
@@ -46,6 +48,14 @@ export class AdminService {
 
   getTotalClipsPending(): Observable<number> {
     return this.clipsPendingCollection
+      .valueChanges()
+      .pipe(
+        map(docs => docs.length)
+      );
+  }
+
+  getTotalClipsReported(): Observable<number> {
+    return this.clipsReportedCollection
       .valueChanges()
       .pipe(
         map(docs => docs.length)
@@ -326,6 +336,48 @@ export class AdminService {
     };
 
     this.pageClips = [clip];
+    this.pendingReq = false;
+  }
+
+  async getClipsReported(option?: string) {
+    if (this.pendingReq) {
+      return;
+    }
+
+    this.pendingReq = true;
+    let query = this.clipsReportedCollection.ref
+      .orderBy('timestamp', 'asc')
+      .limit(7);
+
+    const { length } = this.pageClips;
+
+    if (length) {
+      const lastDocID = this.pageClips[length - 1].docID;
+      const lastDoc = await this.clipsReportedCollection
+        .doc(lastDocID)
+        .get()
+        .toPromise();
+
+      if (option) {
+        if (option === 'next') {
+          query = query.startAfter(lastDoc);
+        } else {
+          query = query.endBefore(lastDoc);
+        }
+      }
+    }
+
+    const snapshot = await query.get();
+    const clips: IClip[] = [];
+
+    snapshot.forEach(doc => {
+      clips.push({
+        docID: doc.id,
+        ...doc.data()
+      });
+    });
+
+    this.pageClips = clips;
     this.pendingReq = false;
   }
 }
