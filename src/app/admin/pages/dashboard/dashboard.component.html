@@ -48,10 +48,15 @@
     </div>
   </div>
 
-  <section>
-    <div class="chart-container p-6 w-5/6 m-auto">
-      <p class="text-xl text-indigo-400 font-semibold mb-2.5">User đăng ký trong năm</p>
+  <section class="flex justify-between">
+    <div class="chart-container p-6 m-auto" style="width: 47%">
+      <p class="text-xl text-blue-700 font-semibold mb-2.5">Video tải lên trong năm</p>
       <canvas id="MyChart">{{ chart }}</canvas>
+    </div>
+
+    <div class="chart-container p-6 m-auto" style="width: 47%">
+      <p class="text-xl text-red-700 font-semibold mb-2.5">Người dùng đăng ký trong năm</p>
+      <canvas id="userChart">{{ userChart }}</canvas>
     </div>
   </section>
 </main>

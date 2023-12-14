@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import {AngularFirestore, AngularFirestoreCollection, QuerySnapshot} from "@angular/fire/compat/firestore";
+import { AngularFirestore, AngularFirestoreCollection } from "@angular/fire/compat/firestore";
 
-import {BehaviorSubject, combineLatest, Observable, of} from "rxjs";
+import { Observable, of} from "rxjs";
 import { filter, map, switchMap } from "rxjs/operators";
 import firebase from 'firebase/compat/app';
 
 import IUser from "../models/user.model";
-import IClip from "../models/clip.model";
 
 @Injectable()
 export class AuthService {
@@ -77,14 +76,6 @@ export class AuthService {
       age: userData.age
     });
   }
-
-  // checkUserStatus(currentUser: firebase.User): Observable<string> {
-  //   return this.usersCollection.doc(currentUser.uid)
-  //     .valueChanges()
-  //     .pipe(
-  //       map(doc => doc?.status ?? '')
-  //     );
-  // }
 
   checkUserStatus() {
     return this.auth.user.pipe(

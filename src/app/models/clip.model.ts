@@ -14,4 +14,5 @@ export default interface IClip {
   description?: string;
   status: string;
   flag?: number;
+  totalComments?: number;
 }

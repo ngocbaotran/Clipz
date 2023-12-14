@@ -2,6 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
 import { ClipService } from "../services/clip.service";
+import { CommentService } from '../services/comment.service';
 
 @Component({
   selector: 'app-clips-list',
@@ -13,9 +14,11 @@ export class ClipsListComponent implements OnInit, OnDestroy {
   @Input() scrollable = true;
 
   constructor(
-    public clipService: ClipService
+    public clipService: ClipService,
+    private commentService: CommentService
   ) {
     this.clipService.getClips();
+    this.mapCommentToPageClips();
   }
 
   ngOnInit(): void {
@@ -40,6 +43,17 @@ export class ClipsListComponent implements OnInit, OnDestroy {
 
     if (bottomOfWindow) {
       this.clipService.getClips();
+      this.mapCommentToPageClips();
+    }
+  }
+
+  mapCommentToPageClips() {
+    for (let clip of this.clipService.pageClips) {
+      if (!clip.docID) {
+        continue;
+      }
+
+      this.commentService.getTotalComments(clip.docID).subscribe(total => clip.totalComments = total);
     }
   }
 }

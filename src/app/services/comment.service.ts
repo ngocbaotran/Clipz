@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection, DocumentReference, QuerySnapshot } from '@angular/fire/compat/firestore';
+import { AngularFirestore, AngularFirestoreCollection, DocumentReference } from '@angular/fire/compat/firestore';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -89,5 +89,14 @@ export class CommentService {
     });
 
     return additionalComments;
+  }
+
+  getTotalComments(clipId: string): Observable<number> {
+    return this.db.collection('comments', ref => ref
+      .where('clipId', '==', clipId)
+    ).valueChanges()
+      .pipe(
+        map(docs => docs.length)
+      );
   }
 }

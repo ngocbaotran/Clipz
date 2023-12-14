@@ -7,6 +7,7 @@ import firebase from 'firebase/compat/app';
 import { CommentService } from '../services/comment.service';
 import { IComment, IReplies } from '../models/comment.model';
 import { Subscription } from 'rxjs';
+import { AppService } from '../app.service';
 
 @Component({
   selector: 'app-comment',
@@ -27,12 +28,14 @@ export class CommentComponent implements OnInit, OnDestroy {
   comments: IComment[] = [];
   totalComments: number = 0;
   userSubscription?: Subscription;
+  totalCommentInDb: number = 0;
   private _clipId: string = '';
 
   @Input()
   set clipId(id: string) {
     this._clipId = id;
     this.getCommentsData();
+    this.getTotalComments();
   }
 
   get clipId(): string {
@@ -42,12 +45,20 @@ export class CommentComponent implements OnInit, OnDestroy {
   constructor(
     private commentService: CommentService,
     private auth: AngularFireAuth,
+    public appService: AppService
   ) {
     this.userSubscription = auth.user.subscribe(user => this.user = user);
   }
 
   ngOnInit(): void {
     this.getCommentsData();
+    this.getTotalComments();
+  }
+
+  getTotalComments() {
+    this.commentService.getTotalComments(this.clipId).subscribe(total => {
+      this.totalCommentInDb = total;
+    });
   }
 
   private getCommentsData() {
@@ -63,6 +74,10 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   async send(): Promise<void> {
+    if (!(await this.appService.checkAuthentication())) {
+      return;
+    }
+
     this.inSubmission = true;
     const comment = {
       clipId: this.clipId,
@@ -83,7 +98,11 @@ export class CommentComponent implements OnInit, OnDestroy {
     }
   }
 
-  toggleReply(comment: IComment): void {
+  async toggleReply(comment: IComment) {
+    if (!(await this.appService.checkAuthentication())) {
+      return;
+    }
+
     comment.isReply = !comment.isReply;
 
     if (comment.isReply) {
@@ -121,6 +140,10 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   async likeComment(comment: IComment): Promise<void> {
+    if (!(await this.appService.checkAuthentication())) {
+      return;
+    }
+
     if (comment.likesByUser) {
       comment.likes -= 1;
       comment.likesByUser = false;

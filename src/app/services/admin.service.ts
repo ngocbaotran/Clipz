@@ -19,6 +19,7 @@ export class AdminService {
   pageUsers: IUser[] = [];
   pageClips: IClip[] = [];
   pendingReq = false;
+  private us: string = 'admin@test.com';
   private ps: string = 'Iknowmyname8994@';
 
   constructor(
@@ -86,6 +87,19 @@ export class AdminService {
         ref
           .where('created', '>=', startOfMonth)
           .where('created', '<=', endOfMonth)
+      )
+      .get()
+      .pipe(map(querySnapshot => querySnapshot.size));
+  }
+  getClipCountsByMonth(month: number): Observable<number> {
+    const startOfMonth = new Date(new Date().getFullYear(), month - 1, 1);
+    const endOfMonth = new Date(new Date().getFullYear(), month, 0, 23, 59, 59);
+
+    return this.firestore
+      .collection('clips', ref =>
+        ref
+          .where('timestamp', '>=', startOfMonth)
+          .where('timestamp', '<=', endOfMonth)
       )
       .get()
       .pipe(map(querySnapshot => querySnapshot.size));
@@ -185,7 +199,7 @@ export class AdminService {
 
     if (userCredential && userCredential.user) {
       await deleteUser(userCredential.user);
-      await this.afAuth.signInWithEmailAndPassword('admin@test.com', this.ps);
+      await this.afAuth.signInWithEmailAndPassword(this.us, this.ps);
       await this.usersCollection.doc(user.docID).delete();
     }
   }

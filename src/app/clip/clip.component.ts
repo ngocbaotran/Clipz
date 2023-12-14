@@ -5,10 +5,12 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 import videojs from 'video.js';
 import { Subscription } from 'rxjs';
+import firebase from 'firebase/compat';
 
 import IClip from "../models/clip.model";
 import { ClipService } from '../services/clip.service';
-import firebase from 'firebase/compat';
+import { AppService } from '../app.service';
+import { ModalService } from '../services/modal.service';
 
 @Component({
   selector: 'app-clip',
@@ -29,6 +31,8 @@ export class ClipComponent implements OnInit, OnDestroy {
     public route: ActivatedRoute,
     private clipService: ClipService,
     private angularFireAuth: AngularFireAuth,
+    private appService: AppService,
+    private modalService: ModalService
   ) {
     this.userSubscription = angularFireAuth.user.subscribe(user => this.user = user);
   }
@@ -47,7 +51,12 @@ export class ClipComponent implements OnInit, OnDestroy {
   }
 
   async toggleFavorite() {
-    if (!this.clip?.docID || !this.user?.uid) {
+    if (!this.clip?.docID) {
+      return;
+    }
+
+    if (!this.user?.uid) {
+      this.modalService.toggleModal('authentication');
       return;
     }
 
@@ -78,7 +87,7 @@ export class ClipComponent implements OnInit, OnDestroy {
   }
 
   async reportVideo() {
-    if (!this.clip) {
+    if (!this.clip || !(await this.appService.checkAuthentication())) {
       return;
     }
 

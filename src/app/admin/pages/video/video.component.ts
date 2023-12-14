@@ -124,10 +124,16 @@ export class VideoComponent implements OnInit, OnDestroy {
 
   async showClipsPending() {
     await this.adminService.getClipsPending();
+    this.adminService.getTotalClipsPending().subscribe((totalClips) => {
+      this.totalPages = Math.ceil(totalClips / this.pageSize);
+    });
   }
 
   async showClipsReported() {
     await this.adminService.getClipsReported();
+    this.adminService.getTotalClipsReported().subscribe((totalClips) => {
+      this.totalPages = Math.ceil(totalClips / this.pageSize);
+    });
   }
 
   async updateSearchType(event: Event) {
@@ -149,6 +155,11 @@ export class VideoComponent implements OnInit, OnDestroy {
     await this.adminService.clipsPendingCollection.doc(clip.docID).delete();
     await this.adminService.clipsCollection.doc(clip.docID).update({ status: 'approved' });
     this.closeClipDetail();
+    this.adminService.pageClips.forEach((element, index) => {
+      if (element.docID == clip.docID) {
+        element.status = 'approved';
+      }
+    });
   }
 
   async skipClip(clip: IClip) {

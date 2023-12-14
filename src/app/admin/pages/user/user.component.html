@@ -1,6 +1,12 @@
 <main class="flex-1 overflow-x-hidden p-10">
   <div class="flex items-center space-x-4 mb-6 justify-between">
     <h1 class="text-3xl text-indigo-800 font-semibold">Người Dùng</h1>
+    <div *ngIf="showAlert" class="flex items-center p-4 bg-gray-800 rounded-md fixed right-10">
+      <svg class="flex-shrink-0 w-4 h-4 text-green-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+      </svg>
+      <div class="ms-2 text-sm font-medium">ID người dùng đã được copy vào clipboard</div>
+    </div>
   </div>
 
   <div class="relative overflow-x-auto sm:rounded-lg">
@@ -23,7 +29,7 @@
             </svg>
           </div>
           <input type="search" id="default-search" [(ngModel)]="searchString" name="searchString"
-                 class="block w-full p-3 ps-10 outline-none text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="Nhập email..." required>
+                 class="block w-full p-3 ps-10 outline-none text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="Nhập email hoặc ID người dùng..." required>
           <button type="submit"
                   class="text-white absolute end-2.5 bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" style="bottom: 5px">
             Tìm kiếm

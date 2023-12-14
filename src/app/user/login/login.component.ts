@@ -49,12 +49,20 @@ export class LoginComponent implements OnInit {
         const userDoc = await this.db.collection('users').doc(user.uid).get().toPromise();
         const userData = userDoc.data() as IUser;
 
-        if (userData && userData.status === 'suspended') {
-          await this.authService.logout();
+        if (!userData || userData.status === 'suspended') {
+          await this.auth.signOut();
           this.inSubmission = false;
-          this.alertMsg = 'Tài khoản đang tạm khoá.';
           this.alertColor = 'red';
-          return;
+
+          if (!userData) {
+            this.alertMsg = 'Tài khoản không hợp lệ';
+            return;
+          }
+
+          if (userData.status === 'suspended') {
+            this.alertMsg = 'Tài khoản đang tạm khoá';
+            return;
+          }
         }
       }
 

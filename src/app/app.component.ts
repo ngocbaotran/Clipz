@@ -4,6 +4,7 @@ import { AuthService } from "./services/auth.service";
 import { AppService } from './app.service';
 import { NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { ModalService } from './services/modal.service';
 
 @Component({
   selector: 'app-root',
@@ -17,16 +18,13 @@ export class AppComponent implements OnInit, AfterContentChecked {
     public auth: AuthService,
     public appService: AppService,
     private changeDetector: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    private modalService: ModalService
   ) {
   }
 
   ngOnInit() {
-    // this.router.events.pipe(
-    //   filter((event) => event instanceof NavigationEnd)
-    // ).subscribe(() => {
-    //   this.isInAdminModule = this.router.url.includes('/admin');
-    // });
+    this.modalService.register('authentication');
     this.router.events.pipe(
       filter((event): event is NavigationEnd => event instanceof NavigationEnd)
     ).subscribe((event: RouterEvent & NavigationEnd) => {

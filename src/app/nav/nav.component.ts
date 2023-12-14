@@ -7,7 +7,7 @@ import firebase from 'firebase/compat/app';
 import { ModalService } from '../services/modal.service';
 import { AuthService } from "../services/auth.service";
 import { ClipService } from '../services/clip.service';
-import { delay, map } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-nav',
@@ -17,6 +17,7 @@ import { delay, map } from 'rxjs/operators';
 export class NavComponent implements OnInit {
   user: firebase.User | null = null;
   searchString = '';
+  showAlert: boolean = false;
 
   constructor(
     public modalService: ModalService,
@@ -26,20 +27,26 @@ export class NavComponent implements OnInit {
     private route: ActivatedRoute,
     private clipService: ClipService
   ) {
-    angularFireAuth.user.subscribe(user => this.user = user);
+    angularFireAuth.user.subscribe(user => {
+      this.user = user;
+      this.auth.isAuthenticated$ = of(!!user);
+    });
   }
 
   ngOnInit(): void {
-    this.auth.isAuthenticated$ = this.angularFireAuth.user.pipe(
-      map(user => !!user)
-    );
-    this.auth.isAuthenticatedWithDelay$ = this.auth.isAuthenticated$.pipe(delay(1000));
-
     this.auth.checkUserStatus().subscribe((status) => {
       if (status === 'suspended' || status === 'blocked') {
-        console.log('sub');
         this.auth.logout();
         this.router.navigateByUrl('/');
+
+        const showAlert = setTimeout(() => {
+          this.showAlert = true;
+        }, 200);
+
+        setTimeout(() => {
+          clearTimeout(showAlert);
+          this.showAlert = false;
+        }, 1500);
       }
     });
   }
