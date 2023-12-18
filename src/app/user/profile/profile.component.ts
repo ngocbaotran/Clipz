@@ -104,14 +104,14 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
     this.inSubmission = true;
 
     try {
-      await this.user?.updatePassword(this.password.value);
       await this.authService.updateUser(this.informationForm.value, this.user?.uid);
-      await this.authService.logout();
-      await this.router.navigateByUrl('/');
-      // this.userData = this.informationForm.value;
-      // this.initFormValue();
+
+      if (this.informationForm.value.password && this.informationForm.value.confirm_password) {
+        await this.user?.updatePassword(this.password.value);
+        await this.authService.logout();
+        await this.router.navigateByUrl('/');
+      }
     } catch (e) {
-      console.error(e);
       this.alertMsg = 'Cập nhật thất bại! Vui lòng thử lại';
       this.alertColor = 'red';
       this.inSubmission = false;
@@ -125,8 +125,9 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
     setTimeout(() => {
       this.showAlert = false;
       this.inSubmission = false;
-      this.informationForm.reset();
-      this.informationForm.enable();
+      // this.informationForm.reset();
+      // this.initFormValue();
+      this.informationForm.enable({ onlySelf: true });
     }, 1000);
   }
 
