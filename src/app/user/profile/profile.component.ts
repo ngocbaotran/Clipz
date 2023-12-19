@@ -10,7 +10,7 @@ import firebase from 'firebase/compat/app';
 
 import IUser from '../../models/user.model';
 import { RegisterValidators } from "../validators/register-validators";
-import { AuthService } from "../../services/auth.service";;
+import { AuthService } from "../../services/auth.service";
 
 @Component({
   selector: 'app-profile',
@@ -116,6 +116,8 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
       this.alertColor = 'red';
       this.inSubmission = false;
       this.informationForm .enable();
+      this.email.disable();
+      this.phoneNumber.disable();
       return;
     }
 
@@ -125,9 +127,9 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
     setTimeout(() => {
       this.showAlert = false;
       this.inSubmission = false;
-      // this.informationForm.reset();
-      // this.initFormValue();
-      this.informationForm.enable({ onlySelf: true });
+      this.informationForm.enable();
+      this.email.disable();
+      this.phoneNumber.disable();
     }, 1000);
   }
 
